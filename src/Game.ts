@@ -51,8 +51,10 @@ export default class Game {
         this.board.displayBoard(this.canvas);
         this.nextPlayerMove(this.player1, computer1);
         this.board.displayBoard(this.canvas);
-        this.nextPlayerMove(this.player2, computer2);
-        this.board.displayBoard(this.canvas);
+        setTimeout(() => {
+          this.nextPlayerMove(this.player2, computer2);
+          this.board.displayBoard(this.canvas);
+        }, 1000);
       } catch (e) {
         console.log(e, this);
         this.markGameOver(e.message);
