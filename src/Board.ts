@@ -120,14 +120,14 @@ export default class Board {
       ],
       [
         null,
-        new Card(Rank.ACE, Suit.SPADE),
-        new Card(Rank.KING, Suit.SPADE),
-        new Card(Rank.QUEEN, Suit.SPADE),
-        new Card(Rank.TEN, Suit.SPADE),
-        new Card(Rank.NINE, Suit.SPADE),
-        new Card(Rank.EIGHT, Suit.SPADE),
-        new Card(Rank.SEVEN, Suit.HEART),
-        new Card(Rank.SIX, Suit.HEART),
+        new Card(Rank.ACE, Suit.DIAMOND),
+        new Card(Rank.KING, Suit.DIAMOND),
+        new Card(Rank.QUEEN, Suit.DIAMOND),
+        new Card(Rank.TEN, Suit.DIAMOND),
+        new Card(Rank.NINE, Suit.DIAMOND),
+        new Card(Rank.EIGHT, Suit.DIAMOND),
+        new Card(Rank.SEVEN, Suit.DIAMOND),
+        new Card(Rank.SIX, Suit.DIAMOND),
         null
       ]
     ];
@@ -197,6 +197,7 @@ export default class Board {
       throw Error("Unable to get CanvasRenderingContext2D");
     }
 
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let row = 0; row < this.cards.length; row = row + 1) {
       const rowCards = this.cards[row];
       for (let col = 0; col < rowCards.length; col = col + 1) {
@@ -241,17 +242,21 @@ export default class Board {
     ctx.stroke();
 
     ctx.fillStyle = "#000";
-    ctx.font = GAME_CONFIG.TEXT_FONT_FAMILY;
+    ctx.font = GAME_CONFIG.RANK_FONT_FAMILY;
     const textX = x + thickness + GAME_CONFIG.RANK_X_OFFSET;
-    const textY =
-      y + thickness + GAME_CONFIG.CARD_SIZE - GAME_CONFIG.TEXT_Y_OFFSET;
-    ctx.fillText(`${this.rankDisplay(card.rank)}`, textX, textY);
+    const textY = y + thickness + GAME_CONFIG.CARD_SIZE;
+    ctx.fillText(
+      `${this.rankDisplay(card.rank)}`,
+      textX,
+      textY - GAME_CONFIG.RANK_Y_OFFSET
+    );
 
     ctx.fillStyle = this.suitColor(card.suit);
+    ctx.font = GAME_CONFIG.SUIT_FONT_FAMILY;
     ctx.fillText(
       `${this.suitDisplay(card.suit)}`,
       textX + GAME_CONFIG.SUIT_X_OFFSET,
-      textY
+      textY - GAME_CONFIG.SUIT_Y_OFFSET
     );
     //console.log(`card: ${card.toString()} position x: ${x}, y: ${y}`);
   }

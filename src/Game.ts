@@ -14,7 +14,7 @@ export default class Game {
   private readonly player2: Player;
   private readonly board: Board;
   private readonly deck: Deck;
-  private interval: number;
+  private interval: NodeJS.Timeout;
   private readonly canvas: HTMLCanvasElement;
 
   constructor(canvas: HTMLCanvasElement) {
@@ -34,27 +34,29 @@ export default class Game {
 
     this.board = new Board();
     this.deck = new Deck();
-    this.interval = 0;
+    this.interval = this.start();
   }
 
-  public start() {
+  private start() {
     this.deck.shuffle();
     this.dealCards(this.player1);
     this.dealCards(this.player2);
 
-    const computer = new Computer();
+    const computer1 = new Computer();
+    const computer2 = new Computer();
 
-    this.interval = setInterval(() => {
-      this.nextPlayerMove(this.player1, computer.nextMove);
-      this.nextPlayerMove(this.player2, computer.nextMove);
-    });
+    return setInterval(() => {
+      this.board.displayBoard(this.canvas);
+      this.nextPlayerMove(this.player1, computer1);
+      this.board.displayBoard(this.canvas);
+      this.nextPlayerMove(this.player2, computer2);
+      this.board.displayBoard(this.canvas);
+    }, 2000);
   }
 
-  private nextPlayerMove(
-    player: Player,
-    moveFunc: (boardCards: (Card | null | Chip)[][], cards: Card[]) => Move
-  ) {
-    const move = moveFunc(this.board.cards, player.cards);
+  private nextPlayerMove(player: Player, computer: Computer) {
+    const move = computer.nextMove(this.board.cards, player.cards);
+    console.log(move);
     // validate move has valid fields
     // validate player has this card
     this.validatePlayerHasCard(player, move.card);

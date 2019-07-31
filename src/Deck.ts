@@ -6,17 +6,26 @@ export default class Deck {
   cards: Card[];
   constructor() {
     this.cards = [];
-    for (const key in Suit) {
-      if (isNaN(Number(key)) && Suit.hasOwnProperty(key)) {
-        const suit = (<any>Suit)[Suit[key]];
-        for (const rankKey in Rank) {
-          if (isNaN(Number(rankKey)) && Rank.hasOwnProperty(rankKey)) {
-            const rank = (<any>Rank)[Rank[rankKey]];
-            this.cards.push(new Card(rank, suit));
-          }
-        }
-      }
-    }
+    this.addCardsForSuit(Suit.CLUB);
+    this.addCardsForSuit(Suit.DIAMOND);
+    this.addCardsForSuit(Suit.HEART);
+    this.addCardsForSuit(Suit.SPADE);
+  }
+
+  private addCardsForSuit(suit: Suit) {
+    this.cards.push(new Card(Rank.ACE, suit));
+    this.cards.push(new Card(Rank.TWO, suit));
+    this.cards.push(new Card(Rank.THREE, suit));
+    this.cards.push(new Card(Rank.FOUR, suit));
+    this.cards.push(new Card(Rank.FIVE, suit));
+    this.cards.push(new Card(Rank.SIX, suit));
+    this.cards.push(new Card(Rank.SEVEN, suit));
+    this.cards.push(new Card(Rank.EIGHT, suit));
+    this.cards.push(new Card(Rank.NINE, suit));
+    this.cards.push(new Card(Rank.TEN, suit));
+    this.cards.push(new Card(Rank.JACK, suit));
+    this.cards.push(new Card(Rank.QUEEN, suit));
+    this.cards.push(new Card(Rank.KING, suit));
   }
 
   public shuffle() {

@@ -9,13 +9,13 @@ export default class Computer {
     boardCards: (Card | null | Chip)[][],
     playerCards: Card[]
   ): Move {
-    for (const card of playerCards) {
+    for (let i = 0; i < playerCards.length; i++) {
+      const card = playerCards[i];
       const position = this.findCardPosition(boardCards, card);
       if (position != null) {
         return new Move(MoveType.PLACE_CHIP, card, position);
       }
     }
-
     throw new Error("All player cards are dead cards");
   }
 
