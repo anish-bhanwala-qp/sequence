@@ -42,4 +42,10 @@ export default class Player {
       `Player does not have this card: ${cardToDiscard.toString()}`
     );
   }
+
+  public cloneCards(): Card[] {
+    const cards: Card[] = [];
+    this.cards.forEach(c => cards.push(c.clone()));
+    return cards;
+  }
 }

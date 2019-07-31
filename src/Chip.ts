@@ -5,4 +5,8 @@ export default class Chip {
   constructor(color: ChipColor) {
     this.color = color;
   }
+
+  public clone(): Chip {
+    return new Chip(this.color);
+  }
 }

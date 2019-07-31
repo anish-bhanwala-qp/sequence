@@ -6,6 +6,11 @@ export default class Deck {
   cards: Card[];
   constructor() {
     this.cards = [];
+    this.addOneDeck();
+    this.addOneDeck();
+  }
+
+  private addOneDeck() {
     this.addCardsForSuit(Suit.CLUB);
     this.addCardsForSuit(Suit.DIAMOND);
     this.addCardsForSuit(Suit.HEART);

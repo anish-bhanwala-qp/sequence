@@ -9,6 +9,7 @@ const GAME_CONFIG = Object.freeze({
   SUIT_Y_OFFSET: 10,
   RANK_X_OFFSET: 5,
   SUIT_X_OFFSET: 30,
+  TURN_INTERVAL: 200,
 });
 
 export default GAME_CONFIG;

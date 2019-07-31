@@ -31,4 +31,8 @@ export default class Card {
   public toString(): string {
     return `Rank: ${Rank[this.rank]}, Suit: ${Suit[this.suit]}`;
   }
+
+  public clone(): Card {
+    return new Card(this.rank, this.suit);
+  }
 }
