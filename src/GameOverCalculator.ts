@@ -17,11 +17,11 @@ export default class GameOverCalculator {
     }
 
     return false;
-    // Calcualte diagnally
-    /* for (let row = 0; row < board.spaces.length; row = row + 1) {
-      const spacesRow = board.spaces[row];
-      for (let col = 0; col < spacesRow.length; col = col + 1) {
-        const space = spacesRow[col];
+    // Calculate diagonally
+    /* for (let row = 0; row < board.slots.length; row = row + 1) {
+      const slotsRow = board.slots[row];
+      for (let col = 0; col < slotsRow.length; col = col + 1) {
+        const space = slotsRow[col];
         if (space instanceof Card && move.card.matches(space)) {
           throw Error(`Card is not dead: ${move.card.toString()}`);
         }
@@ -36,7 +36,7 @@ export default class GameOverCalculator {
   ): boolean {
     let sequenceCount = 0;
     for (let i = 0; i < 10; i++) {
-      const element = board.spaces[row][i];
+      const element = board.slots[row][i];
       // either same color chip or corner
       if (
         element === null ||
@@ -61,8 +61,11 @@ export default class GameOverCalculator {
   ): boolean {
     let sequenceCount = 0;
     for (let i = 0; i < 10; i++) {
-      const element = board.spaces[i][column];
-      if (element instanceof Chip && element.color === chipColor) {
+      const element = board.slots[i][column];
+      if (
+        element === null ||
+        (element instanceof Chip && element.color === chipColor)
+      ) {
         sequenceCount++;
       } else {
         sequenceCount = 0;

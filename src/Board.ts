@@ -7,9 +7,9 @@ import Position from "./Position";
 import GAME_CONFIG from "./GAME_CONFIG";
 
 export default class Board {
-  readonly spaces: (Card | null | Chip)[][];
+  readonly slots: (Card | null | Chip)[][];
   constructor() {
-    this.spaces = [
+    this.slots = [
       [
         null,
         new Card(Rank.TWO, Suit.SPADE),
@@ -134,26 +134,26 @@ export default class Board {
   }
 
   public removeChip(position: Position) {
-    const space = this.spaces[position.row][position.col];
-    if (!(space instanceof Chip)) {
+    const slot = this.slots[position.row][position.col];
+    if (!(slot instanceof Chip)) {
       throw Error(
         `There is no chip to be removed at position: ${position.toString()}`
       );
     }
 
-    this.spaces[position.row][position.col] =
+    this.slots[position.row][position.col] =
       DEFAULT_BOARD_STATE[position.row][position.col];
   }
 
   public placeChip(chip: Chip, card: Card, position: Position) {
     this.validateChipCanBePlaced(card, position);
 
-    this.spaces[position.row][position.col] = chip;
+    this.slots[position.row][position.col] = chip;
   }
 
   private validateChipCanBePlaced(playerCard: Card, position: Position) {
     const { row, col } = position;
-    const elementAtPos = this.spaces[row][col];
+    const elementAtPos = this.slots[row][col];
     if (elementAtPos instanceof Chip) {
       throw Error(`Chip already placed at position: ${position.toString()}`);
     }
@@ -177,8 +177,8 @@ export default class Board {
   public verifyBoard() {
     const deck = new Deck();
 
-    for (let row = 0; row < this.spaces.length; row = row + 1) {
-      const rowCards = this.spaces[row];
+    for (let row = 0; row < this.slots.length; row = row + 1) {
+      const rowCards = this.slots[row];
       for (let col = 0; col < rowCards.length; col = col + 1) {
         const boardCard = rowCards[col];
         if (boardCard == null) {
@@ -208,8 +208,8 @@ export default class Board {
     }
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let row = 0; row < this.spaces.length; row = row + 1) {
-      const rowCards = this.spaces[row];
+    for (let row = 0; row < this.slots.length; row = row + 1) {
+      const rowCards = this.slots[row];
       for (let col = 0; col < rowCards.length; col = col + 1) {
         const boardElement = rowCards[col];
         const position = new Position(row, col);
@@ -335,13 +335,13 @@ export default class Board {
     );
   }
 
-  public cloneSpaces(): (Card | null | Chip)[][] {
-    const spaces: (Card | null | Chip)[][] = [];
-    this.spaces.map(row => {
-      spaces.push(row.map(col => (col === null ? col : col.clone())));
+  public cloneSlots(): (Card | null | Chip)[][] {
+    const slots: (Card | null | Chip)[][] = [];
+    this.slots.map(row => {
+      slots.push(row.map(col => (col === null ? col : col.clone())));
     });
 
-    return spaces;
+    return slots;
   }
 }
 

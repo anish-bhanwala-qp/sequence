@@ -9,63 +9,83 @@ import Chip from "./Chip";
 import MoveType from "./MoveType";
 import ChipColor from "./ChipColor";
 import GameOverCalculator from "./GameOverCalculator";
+import Computer2 from "./Computer2";
 
 export default class Game {
   private readonly player1: Player;
   private readonly player2: Player;
   private readonly board: Board;
   private readonly deck: Deck;
-  private interval: NodeJS.Timeout;
   private readonly canvas: HTMLCanvasElement;
+  private readonly computer1: Computer;
+  private readonly computer2: Computer2;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
     this.player1 = new Player(
-      "player1",
+      "computer1",
       GAME_CONFIG.NUMBER_OF_CARDS_TWO_PLAYER,
       false,
       ChipColor.GREEN
     );
     this.player2 = new Player(
-      "computer",
+      "computer2",
       GAME_CONFIG.NUMBER_OF_CARDS_TWO_PLAYER,
       true,
       ChipColor.RED
     );
 
+    this.computer1 = new Computer();
+    this.computer2 = new Computer2();
+
     this.board = new Board();
     this.deck = new Deck();
-    this.interval = this.start();
+
+    this.start();
   }
 
   private start() {
     this.deck.shuffle();
     this.dealCards(this.player1);
     this.dealCards(this.player2);
-
-    const computer1 = new Computer();
-    const computer2 = new Computer();
-
-    return setInterval(() => {
-      try {
-        this.board.displayBoard(this.canvas);
-        this.nextPlayerMove(this.player1, computer1);
-        this.board.displayBoard(this.canvas);
-        setTimeout(() => {
-          this.nextPlayerMove(this.player2, computer2);
-          this.board.displayBoard(this.canvas);
-        }, 1000);
-      } catch (e) {
-        console.log(e, this);
-        this.markGameOver(e.message);
-      }
-    }, GAME_CONFIG.TURN_INTERVAL);
+    
+    this.board.displayBoard(this.canvas);
+    this.playOneRound();
   }
 
-  private nextPlayerMove(player: Player, computer: Computer) {
+  private playOneRound() {
+    try {
+      this.nextPlayerMove(this.player1, this.computer1);
+      this.board.displayBoard(this.canvas);
+
+      // check if game is over and player won the game
+      if (this.isGameOver(this.player1)) {
+        this.markGameOver(`${this.player1.name} wins!`);
+        return;
+      }
+
+      this.nextPlayerMove(this.player2, this.computer2);
+      this.board.displayBoard(this.canvas);
+
+      // check if game is over and player won the game
+      if (this.isGameOver(this.player2)) {
+        this.markGameOver(`${this.player2.name} wins!`);
+        return;
+      }
+
+      setTimeout(() => {
+        this.playOneRound();
+      }, GAME_CONFIG.TURN_INTERVAL);
+    } catch (e) {
+      console.log(e, this);
+      this.markGameOver(e.message);
+    }
+  }
+
+  private nextPlayerMove(player: Player, computer: Computer | Computer2) {
     // clone cards before giving it to the external call
     const move = computer.nextMove(
-      this.board.cloneSpaces(),
+      this.board.cloneSlots(),
       player.cloneCards()
     );
 
@@ -88,7 +108,7 @@ export default class Game {
       case MoveType.REPLACE_DEAD_CARD:
         this.validateDeadCard(player, move);
         // todo: detect too many recursion
-        this.nextPlayerMove(player, computer);
+        //this.nextPlayerMove(player, computer);
         return;
       case MoveType.REMOVE_CHIP:
         if (move.position == null) {
@@ -105,10 +125,6 @@ export default class Game {
     // if replace dead card - give the turn again to the same player
     // if remove chip - validate card is open and is not part of a sequence
 
-    // check if game is over and player won the game
-    if (this.isGameOver(player)) {
-      this.markGameOver(`${player.name} wins!`);
-    }
     // otherwise replace player's card from the deck
   }
 
@@ -121,7 +137,7 @@ export default class Game {
       throw Error(`Invalid position [${move.position}]`);
     }
 
-    const space = this.board.spaces[(move.position.row, move.position.col)];
+    const space = this.board.slots[(move.position.row, move.position.col)];
     if (!(space instanceof Chip)) {
       throw Error(`There is no chip at position: ${move.position.toString()}`);
     }
@@ -129,13 +145,15 @@ export default class Game {
     if (space.color === player.chipColor) {
       throw Error("Select chip of opponent player.");
     }
+
+    // todo: check if card is chip is part of a sequence
   }
 
   private validateDeadCard(player: Player, move: Move) {
-    for (let row = 0; row < this.board.spaces.length; row = row + 1) {
-      const spacesRow = this.board.spaces[row];
-      for (let col = 0; col < spacesRow.length; col = col + 1) {
-        const space = spacesRow[col];
+    for (let row = 0; row < this.board.slots.length; row = row + 1) {
+      const slotsRow = this.board.slots[row];
+      for (let col = 0; col < slotsRow.length; col = col + 1) {
+        const space = slotsRow[col];
         if (space instanceof Card && move.card.matches(space)) {
           throw Error(`Card is not dead: ${move.card.toString()}`);
         }
@@ -160,7 +178,7 @@ export default class Game {
 
   private markGameOver(message: string) {
     alert(message);
-    clearInterval(this.interval);
+    // clearInterval(this.interval);
   }
 
   private dealCards(player: Player) {

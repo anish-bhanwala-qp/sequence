@@ -9,14 +9,54 @@ export default class Computer {
     boardCards: (Card | null | Chip)[][],
     playerCards: Card[]
   ): Move {
+    const positions: Position[] = [];
     for (let i = 0; i < playerCards.length; i++) {
       const card = playerCards[i];
       const position = this.findCardPosition(boardCards, card);
-      if (position != null) {
-        return new Move(MoveType.PLACE_CHIP, card, position);
+
+      // We have dead card need to replace it
+      if (position == null) {
+        //return new Move(MoveType.REPLACE_DEAD_CARD, card);
+        continue;
       }
+
+      positions.push(position);
     }
-    throw new Error("All player cards are dead cards");
+
+    const nearestPosition = this.findNearestPositionTo(
+      new Position(0, 0),
+      positions
+    );
+
+    const card = boardCards[nearestPosition.row][nearestPosition.col];
+    if (!(card instanceof Card)) {
+      throw Error(`no card at position: ${nearestPosition.toString()}`);
+    }
+    return new Move(MoveType.PLACE_CHIP, card, nearestPosition);
+  }
+
+  private findNearestPositionTo(
+    referencePosition: Position,
+    positions: Position[]
+  ): Position {
+    let nearestPosition: Position = positions[0];
+    let shortestDistance = this.distance(referencePosition, positions[0]);
+    positions.forEach(p => {
+      const dist = this.distance(referencePosition, p);
+      if (dist < shortestDistance) {
+        nearestPosition = p;
+        shortestDistance = dist;
+      }
+    });
+
+    return nearestPosition;
+  }
+
+  private distance(point1: Position, point2: Position): number {
+    const a = point2.col - point1.col;
+    const b = point2.row - point1.row;
+
+    return Math.sqrt(a * a + b * b);
   }
 
   private findCardPosition(

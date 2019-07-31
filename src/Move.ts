@@ -7,7 +7,7 @@ export default class Move {
   type: MoveType;
   card: Card;
   position?: Position;
-  constructor(type: MoveType, card: Card, position: Position) {
+  constructor(type: MoveType, card: Card, position?: Position) {
     this.type = type;
     this.card = card;
     this.position = position;
