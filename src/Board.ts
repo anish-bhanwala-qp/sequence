@@ -162,6 +162,35 @@ export default class Board {
       }, and player's card is ${playerCard.toString()}`
     );
   }
+
+  public verifyBoard() {
+    const board = this;
+    const deck = new Deck();
+
+    for (let row = 0; row < board.cards.length; row = row + 1) {
+      const rowCards = board.cards[row];
+      for (let col = 0; col < rowCards.length; col = col + 1) {
+        const boardCard = rowCards[col];
+        if (boardCard == null) {
+          continue;
+        }
+        for (let i = 0; i < deck.cards.length; i++) {
+          const deckCard = deck.cards[i];
+          if (
+            deckCard instanceof Card &&
+            boardCard instanceof Card &&
+            deckCard.suit === boardCard.suit &&
+            deckCard.rank === boardCard.rank
+          ) {
+            deck.cards.splice(i, 1);
+            break;
+          }
+        }
+      }
+    }
+
+    console.log(deck);
+  }
 }
 
 /* Board.prototype.isDeadCard = function(card) {
@@ -177,30 +206,3 @@ Board.prototype.placeCard = function(row, col, card) {
   // verify card can be placed
   // verify card is open
 }; */
-
-export function verifyBoard() {
-  const board = new Board();
-  const deck = new Deck();
-
-  for (let row = 0; row < board.cards.length; row = row + 1) {
-    const rowCards = board.cards[row];
-    for (let col = 0; col < rowCards.length; col = col + 1) {
-      const boardCard = rowCards[col];
-      if (boardCard == null) {
-        continue;
-      }
-      for (let i = 0; i < deck.cards.length; i++) {
-        const deckCard = deck.cards[i];
-        if (
-          deckCard.suit === boardCard.suit &&
-          deckCard.rank === boardCard.rank
-        ) {
-          deck.cards.splice(i, 1);
-          break;
-        }
-      }
-    }
-  }
-
-  console.log(deck);
-}
