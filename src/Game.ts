@@ -8,6 +8,7 @@ import Computer from "./Computer";
 import Chip from "./Chip";
 import MoveType from "./MoveType";
 import ChipColor from "./ChipColor";
+import GameOverCalculator from "./GameOverCalculator";
 
 export default class Game {
   private readonly player1: Player;
@@ -99,7 +100,7 @@ export default class Game {
     // if remove chip - validate card is open and is not part of a sequence
 
     // check if game is over and player won the game
-    if (this.isGameOver()) {
+    if (this.isGameOver(player)) {
       this.markGameOver(`${player.name} wins!`);
     }
     // otherwise replace player's card from the deck
@@ -146,8 +147,8 @@ export default class Game {
   }
 
   // TODO: complete it
-  private isGameOver(): boolean {
-    return false;
+  private isGameOver(player: Player): boolean {
+    return GameOverCalculator.calculate(this.board, player.chipColor);
   }
 
   private markGameOver(message: string) {
