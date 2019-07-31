@@ -14,10 +14,11 @@ export default class Game {
   private readonly player2: Player;
   private readonly board: Board;
   private readonly deck: Deck;
-  private nextTurn: Player;
   private interval: number;
+  private readonly canvas: HTMLCanvasElement;
 
-  constructor() {
+  constructor(canvas: HTMLCanvasElement) {
+    this.canvas = canvas;
     this.player1 = new Player(
       "player1",
       GAME_CONFIG.NUMBER_OF_CARDS_TWO_PLAYER,
@@ -30,8 +31,6 @@ export default class Game {
       true,
       ChipColor.RED
     );
-
-    this.nextTurn = this.player1;
 
     this.board = new Board();
     this.deck = new Deck();
@@ -46,9 +45,8 @@ export default class Game {
     const computer = new Computer();
 
     this.interval = setInterval(() => {
-      this.nextPlayerMove(this.nextTurn, computer.nextMove);
-      this.nextTurn =
-        this.nextTurn === this.player1 ? this.player2 : this.player1;
+      this.nextPlayerMove(this.player1, computer.nextMove);
+      this.nextPlayerMove(this.player2, computer.nextMove);
     });
   }
 
@@ -81,7 +79,7 @@ export default class Game {
 
     // check if game is over and player won the game
     if (this.isGameOver()) {
-      this.markGameOver(`${this.nextTurn.name} wins!`);
+      this.markGameOver(`${player.name} wins!`);
     }
     // otherwise replace player's card from the deck
   }
@@ -122,6 +120,3 @@ export default class Game {
     this.dealCardToPlayer(player);
   }
 }
-
-/* Computer --------------------------------------------------- */
-//function computerTurn(board, cards) {}

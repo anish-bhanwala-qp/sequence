@@ -1,6 +1,6 @@
 enum ChipColor {
-  RED,
-  GREEN
+  RED = "red",
+  GREEN = "green"
 }
 
 export default ChipColor;
