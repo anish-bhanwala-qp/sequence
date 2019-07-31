@@ -3,9 +3,11 @@ import Suit from "./Suit";
 import Rank from "./Rank";
 
 export default class Deck {
-  cards: Card[];
+  readonly cards: Card[];
+  private readonly discardedCards: Card[];
   constructor() {
     this.cards = [];
+    this.discardedCards = [];
     this.addOneDeck();
     this.addOneDeck();
   }
@@ -57,15 +59,27 @@ export default class Deck {
 
   public dealCard(): Card {
     if (this.isEmpty()) {
-      throw new Error("No cards left in the deck");
+      console.log("No cards left in the deck, reshuffling from discard pile.");
+      // Move cards from discard pile and shuffle again
+      this.moveCardsFromDiscardPile();
+      this.shuffle();
     }
 
     // Pick top card from the deck;
     const card = this.removeTopCard();
+    this.discardedCards.push(card);
     return card;
   }
 
   private removeTopCard(): Card {
     return this.cards.splice(0, 1)[0];
+  }
+
+  private moveCardsFromDiscardPile() {
+    for (var i = 0; i < this.discardedCards.length; i++) {
+      var card = this.discardedCards[i];
+      this.discardedCards.splice(i, 1);
+      this.cards.push(card);
+    }
   }
 }

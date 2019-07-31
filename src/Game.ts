@@ -89,7 +89,11 @@ export default class Game {
         this.nextPlayerMove(player, computer);
         return;
       case MoveType.REMOVE_CHIP:
+        if (move.position == null) {
+          throw Error(`Invalid position [${move.position}]`);
+        }
         this.validateRemoveChip(move, player);
+        this.board.removeChip(move.position);
       default:
         throw new Error(`Invalid move type: ${move.type}`);
     }
@@ -110,6 +114,7 @@ export default class Game {
     if (!move.card.isOneEyedJack()) {
       throw Error(`Card is not oneEyedJack [${move.card.toString()}]`);
     }
+
     if (move.position == null) {
       throw Error(`Invalid position [${move.position}]`);
     }

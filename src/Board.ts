@@ -133,6 +133,18 @@ export default class Board {
     ];
   }
 
+  public removeChip(position: Position) {
+    const space = this.spaces[position.row][position.col];
+    if (!(space instanceof Chip)) {
+      throw Error(
+        `There is no chip to be removed at position: ${position.toString()}`
+      );
+    }
+
+    this.spaces[position.row][position.col] =
+      DEFAULT_BOARD_STATE[position.row][position.col];
+  }
+
   public placeChip(chip: Chip, card: Card, position: Position) {
     this.validateChipCanBePlaced(card, position);
 
