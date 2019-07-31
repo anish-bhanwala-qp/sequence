@@ -2,16 +2,35 @@ import Board from "./Board";
 import ChipColor from "./ChipColor";
 import Card from "./Card";
 import Chip from "./Chip";
+import { timingSafeEqual } from "crypto";
 
 export default class GameOverCalculator {
   public static calculate(board: Board, chipColor: ChipColor): boolean {
-    for (let row = 0; row < 10; row++) {
-      if (GameOverCalculator.rowHasSequence(board, row, chipColor)) {
-        return true;
+    let sequenceCount: number = 0;
+    for (let index = 0; index < 10; index++) {
+      const rowSlots = board.slots[index];
+      const rowResult: Result = GameOverCalculator.hasSequence(
+        board,
+        rowSlots,
+        chipColor
+      );
+      if (rowResult.hasSequence()) {
+        rowResult.markChipsInSequence();
+        sequenceCount++;
       }
-    }
-    for (let col = 0; col < 10; col++) {
-      if (GameOverCalculator.columnHasSequence(board, col, chipColor)) {
+
+      const colSlots = board.slots.map(s => s[index]);
+      const colResult: Result = GameOverCalculator.hasSequence(
+        board,
+        colSlots,
+        chipColor
+      );
+      if (colResult.hasSequence()) {
+        colResult.markChipsInSequence();
+        sequenceCount++;
+      }
+
+      if (sequenceCount > 1) {
         return true;
       }
     }
@@ -29,52 +48,61 @@ export default class GameOverCalculator {
     } */
   }
 
-  private static rowHasSequence(
+  private static hasSequence(
     board: Board,
-    row: number,
+    row: (null | Chip | Card)[],
     chipColor: ChipColor
-  ): boolean {
-    let sequenceCount = 0;
-    for (let i = 0; i < 10; i++) {
-      const element = board.slots[row][i];
+  ): Result {
+    const result = new Result();
+    for (let i = 0; i < row.length; i++) {
+      const element = row[i];
+
       // either same color chip or corner
       if (
         element === null ||
         (element instanceof Chip && element.color === chipColor)
       ) {
-        sequenceCount++;
+        if (element != null) {
+          result.addChip(element);
+        } else {
+          result.addCorner();
+        }
       } else {
-        sequenceCount = 0;
+        result.resetSequence();
       }
-      if (sequenceCount === 5) {
-        return true;
+      if (result.hasSequence()) {
+        break;
       }
     }
 
-    return false;
+    return result;
+  }
+}
+
+class Result {
+  sequenceChips: Chip[] = [];
+  gameOver: boolean = false;
+  sequenceCount: number = 0;
+
+  resetSequence() {
+    this.sequenceChips = [];
+    this.sequenceCount = 0;
   }
 
-  private static columnHasSequence(
-    board: Board,
-    column: number,
-    chipColor: ChipColor
-  ): boolean {
-    let sequenceCount = 0;
-    for (let i = 0; i < 10; i++) {
-      const element = board.slots[i][column];
-      if (
-        element === null ||
-        (element instanceof Chip && element.color === chipColor)
-      ) {
-        sequenceCount++;
-      } else {
-        sequenceCount = 0;
-      }
-      if (sequenceCount === 5) {
-        return true;
-      }
-    }
+  addCorner() {
+    this.sequenceCount++;
+  }
 
-    return false;
+  addChip(chip: Chip) {
+    this.sequenceChips.push(chip);
+    this.sequenceCount++;
+  }
+
+  markChipsInSequence() {
+    this.sequenceChips.forEach(c => c.markInSequence());
+  }
+
+  hasSequence(): boolean {
+    return this.sequenceCount > 4;
   }
 }

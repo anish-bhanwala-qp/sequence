@@ -7,6 +7,7 @@ export default class Player {
   readonly maxCardsAllowed: number;
   readonly isComputer: boolean;
   readonly chipColor: ChipColor;
+  private sequenceCount: number;
   constructor(
     name: string,
     maxCardsAllowed: number,
@@ -18,6 +19,7 @@ export default class Player {
     this.maxCardsAllowed = maxCardsAllowed;
     this.isComputer = isComputer;
     this.chipColor = chipColor;
+    this.sequenceCount = 0;
   }
 
   public addCard(card: Card): void {
@@ -47,5 +49,13 @@ export default class Player {
     const cards: Card[] = [];
     this.cards.forEach(c => cards.push(c.clone()));
     return cards;
+  }
+
+  public sequenceCompleted() {
+    this.sequenceCount++;
+  }
+
+  public getSequenceCount(): number {
+    return this.sequenceCount;
   }
 }

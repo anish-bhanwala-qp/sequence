@@ -48,7 +48,7 @@ export default class Game {
     this.deck.shuffle();
     this.dealCards(this.player1);
     this.dealCards(this.player2);
-    
+
     this.board.displayBoard(this.canvas);
     this.playOneRound();
   }
@@ -107,7 +107,7 @@ export default class Game {
         break;
       case MoveType.REPLACE_DEAD_CARD:
         this.validateDeadCard(player, move);
-        // todo: detect too many recursion
+        // TODO: detect too many recursion
         //this.nextPlayerMove(player, computer);
         return;
       case MoveType.REMOVE_CHIP:
@@ -146,7 +146,7 @@ export default class Game {
       throw Error("Select chip of opponent player.");
     }
 
-    // todo: check if card is chip is part of a sequence
+    // TODO: check if chip is part of a sequence
   }
 
   private validateDeadCard(player: Player, move: Move) {
@@ -178,6 +178,8 @@ export default class Game {
 
   private markGameOver(message: string) {
     alert(message);
+    console.log(this);
+    this.board.displayBoard(this.canvas);
     // clearInterval(this.interval);
   }
 

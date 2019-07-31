@@ -236,6 +236,19 @@ export default class Board {
     position: Position
   ) {
     this.drawBorderedRect(ctx, position, chip.color);
+
+    if (chip.isInSequence()) {
+      console.log("Drawing in sequence");
+      const halfWidth = GAME_CONFIG.CARD_SIZE / 2;
+      const width = GAME_CONFIG.CARD_SIZE;
+      const y = position.row * GAME_CONFIG.CARD_SIZE + halfWidth;
+      const x = position.col * GAME_CONFIG.CARD_SIZE + halfWidth;
+
+      ctx.fillStyle = "#FFFFFF";
+      ctx.beginPath();
+      ctx.arc(x, y, 20, 0, 2 * Math.PI, false);
+      ctx.stroke();
+    }
   }
 
   private drawCard(
