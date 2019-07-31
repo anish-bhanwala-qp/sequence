@@ -216,7 +216,7 @@ export default class Board {
   }
 
   private drawCorner(ctx: CanvasRenderingContext2D, position: Position) {
-    this.drawBorderedRect(ctx, position, "blue");
+    this.drawBorderedRect(ctx, position, "#eee");
   }
 
   private drawChip(
@@ -232,13 +232,23 @@ export default class Board {
     card: Card,
     position: Position
   ) {
-    ctx.fillStyle = "#ccc";
+    const thickness = 1;
+    const x = position.col * GAME_CONFIG.CARD_SIZE;
+    const y = position.row * GAME_CONFIG.CARD_SIZE;
+    const text = `${Rank[card.rank]}, ${Suit[card.suit]}`;
+
+    ctx.fillStyle = "#000";
+    ctx.rect(x, y, GAME_CONFIG.CARD_SIZE, GAME_CONFIG.CARD_SIZE);
+    ctx.stroke();
+
+    ctx.fillStyle = "#000";
     ctx.font = "12px Arial";
     ctx.fillText(
-      `${card.rank} ${card.suit}`,
-      position.col * GAME_CONFIG.CARD_SIZE,
-      position.row * GAME_CONFIG.CARD_SIZE
+      text,
+      x + thickness,
+      y + thickness + GAME_CONFIG.CARD_SIZE - 10
     );
+    //console.log(`card: ${card.toString()} position x: ${x}, y: ${y}`);
   }
 
   private drawBorderedRect(
@@ -250,15 +260,16 @@ export default class Board {
     const x = position.col * GAME_CONFIG.CARD_SIZE;
     const width = GAME_CONFIG.CARD_SIZE;
     const thickness = 1;
-    ctx.fillStyle = color;
-    ctx.fillRect(x, y, width, width);
 
     ctx.fillStyle = "#000";
+    ctx.fillRect(x, y, width, width);
+
+    ctx.fillStyle = color;
     ctx.fillRect(
-      x - thickness,
-      y - thickness,
-      width + thickness * 2,
-      width + thickness * 2
+      x + thickness,
+      y + thickness,
+      width - thickness * 2,
+      width - thickness * 2
     );
   }
 }

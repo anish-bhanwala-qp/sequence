@@ -29,6 +29,6 @@ export default class Card {
   }
 
   public toString(): string {
-    return `rank: ${this.rank}, suit: ${this.suit}`;
+    return `Rank: ${Rank[this.rank]}, Suit: ${Suit[this.suit]}`;
   }
 }
