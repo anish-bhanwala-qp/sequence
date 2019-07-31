@@ -28,4 +28,18 @@ export default class Player {
     }
     this.cards.push(card);
   }
+
+  public discardCard(cardToDiscard: Card) {
+    for (let i = 0; i < this.cards.length; i++) {
+      const card = this.cards[i];
+      if (card.matches(cardToDiscard)) {
+        this.cards.splice(i, 1);
+        return;
+      }
+    }
+
+    throw new Error(
+      `Player does not have this card: ${cardToDiscard.toString()}`
+    );
+  }
 }

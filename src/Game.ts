@@ -60,6 +60,8 @@ export default class Game {
     // validate move has valid fields
     // validate player has this card
     this.validatePlayerHasCard(player, move.card);
+    this.dealNewCardToPlayer(player, move.card);
+
     switch (move.type) {
       case MoveType.PLACE_CHIP:
         this.board.placeChip(
@@ -67,6 +69,7 @@ export default class Game {
           move.card,
           move.position
         );
+        break;
       default:
         throw new Error(`Invalid move type: ${move.type}`);
     }
@@ -77,6 +80,9 @@ export default class Game {
     // if remove chip - validate card is open and is not part of a sequence
 
     // check if game is over and player won the game
+    if (this.isGameOver()) {
+      this.markGameOver(`${this.nextTurn.name} wins!`);
+    }
     // otherwise replace player's card from the deck
   }
 
@@ -90,6 +96,11 @@ export default class Game {
     throw new Error(`Card should belong to player's hand: ${card.toString}`);
   }
 
+  // TODO: complete it
+  private isGameOver(): boolean {
+    return false;
+  }
+
   private markGameOver(message: string) {
     alert(message);
     clearInterval(this.interval);
@@ -97,9 +108,18 @@ export default class Game {
 
   private dealCards(player: Player) {
     for (let i = 0; i < GAME_CONFIG.NUMBER_OF_CARDS_TWO_PLAYER; i = i + 1) {
-      const card = this.deck.dealCard();
-      player.addCard(card);
+      this.dealCardToPlayer(player);
     }
+  }
+
+  private dealCardToPlayer(player: Player) {
+    const card = this.deck.dealCard();
+    player.addCard(card);
+  }
+
+  private dealNewCardToPlayer(player: Player, oldCard: Card) {
+    player.discardCard(oldCard);
+    this.dealCardToPlayer(player);
   }
 }
 
