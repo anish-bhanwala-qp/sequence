@@ -235,20 +235,67 @@ export default class Board {
     const thickness = 1;
     const x = position.col * GAME_CONFIG.CARD_SIZE;
     const y = position.row * GAME_CONFIG.CARD_SIZE;
-    const text = `${Rank[card.rank]}, ${Suit[card.suit]}`;
 
     ctx.fillStyle = "#000";
     ctx.rect(x, y, GAME_CONFIG.CARD_SIZE, GAME_CONFIG.CARD_SIZE);
     ctx.stroke();
 
     ctx.fillStyle = "#000";
-    ctx.font = "12px Arial";
+    ctx.font = GAME_CONFIG.TEXT_FONT_FAMILY;
+    const textX = x + thickness + GAME_CONFIG.RANK_X_OFFSET;
+    const textY =
+      y + thickness + GAME_CONFIG.CARD_SIZE - GAME_CONFIG.TEXT_Y_OFFSET;
+    ctx.fillText(`${this.rankDisplay(card.rank)}`, textX, textY);
+
+    ctx.fillStyle = this.suitColor(card.suit);
     ctx.fillText(
-      text,
-      x + thickness,
-      y + thickness + GAME_CONFIG.CARD_SIZE - 10
+      `${this.suitDisplay(card.suit)}`,
+      textX + GAME_CONFIG.SUIT_X_OFFSET,
+      textY
     );
     //console.log(`card: ${card.toString()} position x: ${x}, y: ${y}`);
+  }
+
+  private rankDisplay(rank: Rank) {
+    if (rank === Rank.ACE) {
+      return "A";
+    } else if (rank === Rank.JACK) {
+      return "J";
+    } else if (rank === Rank.QUEEN) {
+      return "Q";
+    } else if (rank === Rank.KING) {
+      return "K";
+    } else {
+      return rank;
+    }
+  }
+
+  private suitDisplay(suit: Suit) {
+    switch (suit) {
+      case Suit.SPADE:
+        return "\u{2660}";
+      case Suit.HEART:
+        return "\u{2665}";
+      case Suit.DIAMOND:
+        return "\u{2666}";
+      case Suit.CLUB:
+        return "\u{2663}";
+      default:
+        throw new Error(`Invalid suit: ${Suit[suit]}`);
+    }
+  }
+
+  private suitColor(suit: Suit) {
+    switch (suit) {
+      case Suit.SPADE:
+      case Suit.CLUB:
+        return "#000";
+      case Suit.HEART:
+      case Suit.DIAMOND:
+        return "red";
+      default:
+        throw new Error(`Invalid suit: ${Suit[suit]}`);
+    }
   }
 
   private drawBorderedRect(

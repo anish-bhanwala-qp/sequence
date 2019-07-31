@@ -1,5 +1,5 @@
 enum Rank {
-  ACE,
+  ACE = 1,
   TWO,
   THREE,
   FOUR,
