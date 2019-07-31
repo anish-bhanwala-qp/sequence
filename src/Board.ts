@@ -164,11 +164,10 @@ export default class Board {
   }
 
   public verifyBoard() {
-    const board = this;
     const deck = new Deck();
 
-    for (let row = 0; row < board.cards.length; row = row + 1) {
-      const rowCards = board.cards[row];
+    for (let row = 0; row < this.cards.length; row = row + 1) {
+      const rowCards = this.cards[row];
       for (let col = 0; col < rowCards.length; col = col + 1) {
         const boardCard = rowCards[col];
         if (boardCard == null) {
@@ -177,7 +176,6 @@ export default class Board {
         for (let i = 0; i < deck.cards.length; i++) {
           const deckCard = deck.cards[i];
           if (
-            deckCard instanceof Card &&
             boardCard instanceof Card &&
             deckCard.suit === boardCard.suit &&
             deckCard.rank === boardCard.rank
