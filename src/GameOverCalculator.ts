@@ -14,7 +14,12 @@ export default class GameOverCalculator {
       );
       if (rowResult.hasSequence()) {
         rowResult.markChipsInSequence();
-        sequenceCount++;
+        // Complete row is part of two sequence
+        if (rowResult.sequenceCount === 10) {
+          sequenceCount += 2;
+        } else {
+          sequenceCount++;
+        }
       }
 
       const colSlots = board.slots.map(s => s[index]);
@@ -24,7 +29,12 @@ export default class GameOverCalculator {
       );
       if (colResult.hasSequence()) {
         colResult.markChipsInSequence();
-        sequenceCount++;
+        // Complete row is part of two sequence
+        if (colResult.sequenceCount === 10) {
+          sequenceCount += 2;
+        } else {
+          sequenceCount++;
+        }
       }
     }
 
@@ -149,9 +159,6 @@ export default class GameOverCalculator {
       } else {
         result.resetSequence();
       }
-      if (result.hasSequence()) {
-        break;
-      }
     }
 
     return result;
@@ -162,13 +169,16 @@ class Result {
   sequenceChips: Chip[] = [];
   gameOver: boolean = false;
   sequenceCount: number = 0;
+  cornerCount: number = 0;
 
   resetSequence() {
     this.sequenceChips = [];
     this.sequenceCount = 0;
+    this.cornerCount = 0;
   }
 
   addCorner() {
+    this.cornerCount++;
     this.sequenceCount++;
   }
 
@@ -178,7 +188,13 @@ class Result {
   }
 
   markChipsInSequence() {
-    this.sequenceChips.forEach(c => c.markInSequence());
+    if (this.sequenceCount !== 10) {
+      for (let i = 0; i < 5 - this.cornerCount; i++) {
+        this.sequenceChips[i].markInSequence();
+      }
+    } else {
+      this.sequenceChips.forEach(c => c.markInSequence());
+    }
   }
 
   hasSequence(): boolean {
