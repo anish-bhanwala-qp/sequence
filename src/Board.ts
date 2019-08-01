@@ -252,14 +252,12 @@ export default class Board {
       ctx.arc(x, y, 20, 0, 2 * Math.PI, false);
       ctx.fill();
     }
+    
     ctx.fillStyle = chip.color;
     ctx.beginPath();
     const radius = chip.isInSequence() ? 10 : 20;
     ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
     ctx.fill();
-    if (chip.isInSequence()) {
-      console.log("Drawing in sequence");
-    }
   }
 
   private drawCard(

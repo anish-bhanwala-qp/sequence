@@ -17,12 +17,15 @@ export default class Game {
   private readonly board: Board;
   private readonly deck: Deck;
   private readonly canvas: HTMLCanvasElement;
+  private readonly resultHeader: HTMLHeadElement;
   private readonly computer1: Computer;
   private readonly computer2: Computer2;
   private gameInterval?: NodeJS.Timeout;
 
-  constructor(canvas: HTMLCanvasElement) {
+  constructor(canvas: HTMLCanvasElement, resultHeader: HTMLHeadingElement) {
     this.canvas = canvas;
+    this.resultHeader = resultHeader;
+
     this.player1 = new Player(
       "computer1",
       GAME_CONFIG.NUMBER_OF_CARDS_TWO_PLAYER,
@@ -63,9 +66,7 @@ export default class Game {
 
       // check if game is over and player won the game
       if (this.isGameOver(this.player1)) {
-        setTimeout(() => {
-          this.markGameOver(`${this.player1.name} wins!`);
-        }, 300);
+        this.markGameOver(`${this.player1.name} wins!`);
         return;
       }
 
@@ -74,9 +75,7 @@ export default class Game {
 
       // check if game is over and player won the game
       if (this.isGameOver(this.player2)) {
-        setTimeout(() => {
-          this.markGameOver(`${this.player2.name} wins!`);
-        }, 300);
+        this.markGameOver(`${this.player2.name} wins!`);
         return;
       }
     } catch (e) {
@@ -149,7 +148,9 @@ export default class Game {
       throw Error("Select chip of opponent player.");
     }
 
-    // TODO: check if chip is part of a sequence
+    if (space instanceof Chip && space.isInSequence()) {
+      throw Error("Chip is already part of a sequence");
+    }
   }
 
   private validateDeadCard(player: Player, move: Move) {
@@ -180,13 +181,13 @@ export default class Game {
   }
 
   private markGameOver(message: string) {
-    alert(message);
+    this.resultHeader.innerText = message;
+    this.resultHeader.style.display = "block";
     console.log(this);
     if (this.gameInterval != null) {
       clearInterval(this.gameInterval);
     }
     this.board.displayBoard(this.canvas);
-    // clearInterval(this.interval);
   }
 
   private dealCards(player: Player) {

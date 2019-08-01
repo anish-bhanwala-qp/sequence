@@ -4,12 +4,20 @@ import Board from "./Board";
 import GAME_CONFIG from "./GAME_CONFIG";
 
 const canvas = createCanvas();
-const game = new Game(canvas);
+const h1 = createResultHeading();
+const game = new Game(canvas, h1);
 console.log(game);
 
-console.log("testing", new Deck(), new Board().verifyBoard());
+function createResultHeading() {
+  const h1 = document.createElement("h1");
+  h1.id = "resultHeading";
+  h1.style.display = "none";
+  h1.style.fontSize = "100px";
+  h1.style.cssFloat = "right";
+  appendElementToBody(h1);
 
-new Board().displayBoard(canvas);
+  return h1;
+}
 
 function createCanvas() {
   const canvas = document.createElement("canvas");
@@ -17,8 +25,11 @@ function createCanvas() {
   canvas.height = GAME_CONFIG.CANVAS_HEIGHT;
   canvas.id = "canvasId";
 
-  const body = document.getElementsByTagName("body")[0];
-  body.appendChild(canvas);
-
+  appendElementToBody(canvas);
   return canvas;
+}
+
+function appendElementToBody(element: any) {
+  const body = document.getElementsByTagName("body")[0];
+  body.appendChild(element);
 }
