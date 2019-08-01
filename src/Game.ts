@@ -44,7 +44,7 @@ export default class Game {
     this.start();
   }
 
-  private start() {
+  public start() {
     this.deck.shuffle();
     this.dealCards(this.player1);
     this.dealCards(this.player2);
