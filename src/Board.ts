@@ -249,13 +249,15 @@ export default class Board {
     if (chip.isInSequence()) {
       ctx.fillStyle = "#000";
       ctx.beginPath();
-      ctx.arc(x, y, 20, 0, 2 * Math.PI, false);
+      ctx.arc(x, y, GAME_CONFIG.CHIP_RADIUS, 0, 2 * Math.PI, false);
       ctx.fill();
     }
-    
+
     ctx.fillStyle = chip.color;
     ctx.beginPath();
-    const radius = chip.isInSequence() ? 10 : 20;
+    const radius = chip.isInSequence()
+      ? GAME_CONFIG.CHIP_RADIUS / 2
+      : GAME_CONFIG.CHIP_RADIUS;
     ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
     ctx.fill();
   }
@@ -278,61 +280,19 @@ export default class Board {
     const textX = x + thickness + GAME_CONFIG.RANK_X_OFFSET;
     const textY = y + thickness + GAME_CONFIG.CARD_SIZE;
     ctx.fillText(
-      `${this.rankDisplay(card.rank)}`,
+      `${card.rankDisplay()}`,
       textX,
       textY - GAME_CONFIG.RANK_Y_OFFSET
     );
 
-    ctx.fillStyle = this.suitColor(card.suit);
+    ctx.fillStyle = card.suitColor();
     ctx.font = GAME_CONFIG.SUIT_FONT_FAMILY;
     ctx.fillText(
-      `${this.suitDisplay(card.suit)}`,
+      `${card.suitDisplay()}`,
       textX + GAME_CONFIG.SUIT_X_OFFSET,
       textY - GAME_CONFIG.SUIT_Y_OFFSET
     );
     //console.log(`card: ${card.toString()} position x: ${x}, y: ${y}`);
-  }
-
-  private rankDisplay(rank: Rank) {
-    if (rank === Rank.ACE) {
-      return "A";
-    } else if (rank === Rank.JACK) {
-      return "J";
-    } else if (rank === Rank.QUEEN) {
-      return "Q";
-    } else if (rank === Rank.KING) {
-      return "K";
-    } else {
-      return rank;
-    }
-  }
-
-  private suitDisplay(suit: Suit) {
-    switch (suit) {
-      case Suit.SPADE:
-        return "\u{2660}";
-      case Suit.HEART:
-        return "\u{2665}";
-      case Suit.DIAMOND:
-        return "\u{2666}";
-      case Suit.CLUB:
-        return "\u{2663}";
-      default:
-        throw new Error(`Invalid suit: ${Suit[suit]}`);
-    }
-  }
-
-  private suitColor(suit: Suit) {
-    switch (suit) {
-      case Suit.SPADE:
-      case Suit.CLUB:
-        return "#000";
-      case Suit.HEART:
-      case Suit.DIAMOND:
-        return "red";
-      default:
-        throw new Error(`Invalid suit: ${Suit[suit]}`);
-    }
   }
 
   private drawBorderedRect(

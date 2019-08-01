@@ -62,7 +62,7 @@ export default class Game {
     this.dealCards(this.player1);
     this.dealCards(this.player2);
 
-    this.board.displayBoard(this.canvas);
+    this.display();
     this.gameInterval = setInterval(() => {
       this.playOneRound();
     }, GAME_CONFIG.TURN_INTERVAL);
@@ -71,7 +71,7 @@ export default class Game {
   private playOneRound() {
     try {
       this.nextPlayerMove(this.player1, this.computer1);
-      this.board.displayBoard(this.canvas);
+      this.display();
 
       // check if game is over and player won the game
       if (this.isGameOver(this.player1)) {
@@ -80,7 +80,7 @@ export default class Game {
       }
 
       this.nextPlayerMove(this.player2, this.computer2);
-      this.board.displayBoard(this.canvas);
+      this.display();
 
       // check if game is over and player won the game
       if (this.isGameOver(this.player2)) {
@@ -184,6 +184,12 @@ export default class Game {
     throw new Error(`Card should belong to player's hand: ${card.toString}`);
   }
 
+  private display() {
+    this.board.displayBoard(this.canvas);
+    this.player1.display(this.player1DisplayDiv);
+    this.player2.display(this.player2DisplayDiv);
+  }
+
   // TODO: complete it
   private isGameOver(player: Player): boolean {
     return GameOverCalculator.calculate(this.board, player.chipColor);
@@ -196,7 +202,7 @@ export default class Game {
     if (this.gameInterval != null) {
       clearInterval(this.gameInterval);
     }
-    this.board.displayBoard(this.canvas);
+    this.display();
   }
 
   private dealCards(player: Player) {

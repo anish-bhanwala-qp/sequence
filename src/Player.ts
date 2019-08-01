@@ -58,4 +58,9 @@ export default class Player {
   public getSequenceCount(): number {
     return this.sequenceCount;
   }
+
+  public display(div: HTMLDivElement) {
+    div.innerHTML =
+      this.name + ": " + this.cards.map(c => c.getDisplayHtml()).join(", ");
+  }
 }

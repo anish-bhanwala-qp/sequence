@@ -35,4 +35,55 @@ export default class Card {
   public clone(): Card {
     return new Card(this.rank, this.suit);
   }
+
+  public rankDisplay() {
+    if (this.rank === Rank.ACE) {
+      return "A";
+    } else if (this.rank === Rank.JACK) {
+      return "J";
+    } else if (this.rank === Rank.QUEEN) {
+      return "Q";
+    } else if (this.rank === Rank.KING) {
+      return "K";
+    } else {
+      return this.rank;
+    }
+  }
+
+  public suitDisplay() {
+    switch (this.suit) {
+      case Suit.SPADE:
+        return "\u{2660}";
+      case Suit.HEART:
+        return "\u{2665}";
+      case Suit.DIAMOND:
+        return "\u{2666}";
+      case Suit.CLUB:
+        return "\u{2663}";
+      default:
+        throw new Error(`Invalid suit: ${Suit[this.suit]}`);
+    }
+  }
+
+  public suitColor() {
+    switch (this.suit) {
+      case Suit.SPADE:
+      case Suit.CLUB:
+        return "#000";
+      case Suit.HEART:
+      case Suit.DIAMOND:
+        return "red";
+      default:
+        throw new Error(`Invalid suit: ${Suit[this.suit]}`);
+    }
+  }
+
+  public getDisplayHtml() {
+    return (
+      this.rankDisplay() +
+      ` <span style="color: ${this.suitColor()}">` +
+      this.suitDisplay() +
+      "</span>"
+    );
+  }
 }

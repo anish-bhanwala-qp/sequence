@@ -15,7 +15,7 @@ function createResultHeading() {
   const h1 = document.createElement("h1");
   h1.id = "resultHeading";
   h1.style.display = "none";
-  h1.style.fontSize = "100px";
+  h1.style.fontSize = "50px";
   h1.style.cssFloat = "right";
   appendElementToBody(h1);
 
@@ -25,6 +25,7 @@ function createResultHeading() {
 function createPlayerCardsHolder(id: string) {
   const div = document.createElement("div");
   div.id = id;
+  div.style.fontSize = "18px";
   appendElementToBody(div);
 
   return div;
