@@ -3,10 +3,12 @@ import Move from "./Move";
 import MoveType from "./MoveType";
 import Position from "./Position";
 import Chip from "./Chip";
+import ChipColor from "./ChipColor";
 
 export default function nextMove(
   boardCards: (Card | null | Chip)[][],
-  playerCards: Card[]
+  playerCards: Card[],
+  yourChipColor: ChipColor
 ): Move {
   const positions: Position[] = [];
   for (let i = 0; i < playerCards.length; i++) {

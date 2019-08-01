@@ -281,27 +281,21 @@ export default class Board {
 
     ctx.fillStyle = "#000";
     ctx.font = GAME_CONFIG.RANK_FONT_FAMILY;
-    const textX = x + thickness + GAME_CONFIG.RANK_X_OFFSET;
-    const textY = y + thickness + GAME_CONFIG.CARD_SIZE;
-    ctx.fillText(
-      `${card.rankDisplay()}`,
-      textX,
-      textY - GAME_CONFIG.RANK_Y_OFFSET
-    );
+    const rankX = x + GAME_CONFIG.RANK_X_OFFSET;
+    const rankY = y + GAME_CONFIG.RANK_Y_OFFSET;
+    ctx.fillText(`${card.rankDisplay()}`, rankX, rankY);
 
-    ctx.font = "10px Arial";
-    ctx.fillText(
-      `(${position.row}, ${position.col})`,
-      textX,
-      textY - GAME_CONFIG.RANK_Y_OFFSET + 10
-    );
+    ctx.font = GAME_CONFIG.INDEX_FONT_FAMILY;
+    const indexX = x + GAME_CONFIG.INDEX_X_OFFSET;
+    const indexY = y + GAME_CONFIG.INDEX_Y_OFFSET;
+    ctx.fillText(`(${position.row}, ${position.col})`, indexX, indexY);
 
     ctx.fillStyle = card.suitColor();
     ctx.font = GAME_CONFIG.SUIT_FONT_FAMILY;
     ctx.fillText(
       `${card.suitDisplay()}`,
-      textX + GAME_CONFIG.SUIT_X_OFFSET,
-      textY - GAME_CONFIG.SUIT_Y_OFFSET
+      x + GAME_CONFIG.SUIT_X_OFFSET,
+      y + GAME_CONFIG.SUIT_Y_OFFSET
     );
     //console.log(`card: ${card.toString()} position x: ${x}, y: ${y}`);
   }

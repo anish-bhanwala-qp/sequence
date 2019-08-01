@@ -10,10 +10,14 @@ import MoveType from "./MoveType";
 import ChipColor from "./ChipColor";
 import GameOverCalculator from "./GameOverCalculator";
 import Computer2 from "./Computer2";
+import Suit from "./Suit";
+import Rank from "./Rank";
+import Position from "./Position";
 
-type playerAlgoMethodSignature = (
+type AlgorithmMethodSignature = (
   boardCards: (Card | null | Chip)[][],
-  playerCards: Card[]
+  playerCards: Card[],
+  chipColor: ChipColor
 ) => Move;
 
 export default class Game {
@@ -25,17 +29,17 @@ export default class Game {
   private readonly resultHeader: HTMLHeadElement;
   private readonly player1DisplayDiv: HTMLDivElement;
   private readonly player2DisplayDiv: HTMLDivElement;
-  private readonly computer1: playerAlgoMethodSignature;
-  private readonly computer2: playerAlgoMethodSignature;
+  private readonly computer1: AlgorithmMethodSignature;
+  private readonly computer2: AlgorithmMethodSignature;
   private gameInterval?: NodeJS.Timeout;
 
   constructor(
     player1Name: string,
-    player1MoveAlgo: playerAlgoMethodSignature,
-    player2Name: string = "2nd player",
-    player2MoveAlgo: playerAlgoMethodSignature = Computer
+    player1Algorithm: AlgorithmMethodSignature,
+    player2Name: string = "Computer",
+    player2Algorithm: AlgorithmMethodSignature = Computer
   ) {
-    if (player1MoveAlgo == null || typeof player1MoveAlgo !== "function") {
+    if (player1Algorithm == null || typeof player1Algorithm !== "function") {
       throw Error("Must provide game algorithm function to play");
     }
     this.canvas = this.createCanvas();
@@ -53,11 +57,11 @@ export default class Game {
       player2Name,
       GAME_CONFIG.NUMBER_OF_CARDS_TWO_PLAYER,
       true,
-      ChipColor.RED
+      ChipColor.BLUE
     );
 
-    this.computer1 = player1MoveAlgo;
-    this.computer2 = player2MoveAlgo;
+    this.computer1 = player1Algorithm;
+    this.computer2 = player2Algorithm;
 
     this.board = new Board();
     this.deck = new Deck();
@@ -78,8 +82,17 @@ export default class Game {
 
   private playOneRound() {
     try {
-      this.nextPlayerMove(this.player1, this.computer1);
-      this.display();
+      try {
+        this.nextPlayerMove(this.player1, this.computer1);
+        this.display();
+      } catch (e) {
+        console.log(e);
+        this.markGameOver(
+          `${this.player2.name} won because of other player's 
+          error: <small style="color: #848484">${e.message}</small>`
+        );
+        return;
+      }
 
       // check if game is over and player won the game
       if (this.isGameOver(this.player1)) {
@@ -87,9 +100,17 @@ export default class Game {
         return;
       }
 
-      this.nextPlayerMove(this.player2, this.computer2);
-      this.display();
-
+      try {
+        this.nextPlayerMove(this.player2, this.computer2);
+        this.display();
+      } catch (e) {
+        console.log(e);
+        this.markGameOver(
+          `${this.player1.name} won because of other player's 
+          error: <small style="color: #848484">${e.message}</small>`
+        );
+        return;
+      }
       // check if game is over and player won the game
       if (this.isGameOver(this.player2)) {
         this.markGameOver(`${this.player2.name} wins!`);
@@ -97,19 +118,27 @@ export default class Game {
       }
     } catch (e) {
       console.log(e, this);
-      this.markGameOver(e.message);
+      this.markGameOver(`Game error: ${e.message}`);
     }
   }
 
   private nextPlayerMove(
     player: Player,
-    playerAlgoMethod: playerAlgoMethodSignature,
+    algorithm: AlgorithmMethodSignature,
     secondTurn = false
   ) {
     // clone cards before giving it to the external call
-    const move = playerAlgoMethod(this.board.cloneSlots(), player.cloneCards());
+    const tempMove = algorithm(
+      this.board.cloneSlots(),
+      player.cloneCards(),
+      player.chipColor
+    );
 
     // validate move has valid fields
+    this.validateMoveStructure(tempMove);
+
+    const move = this.createMoveClassObject(tempMove);
+
     // validate player has this card
     this.validatePlayerHasCard(player, move.card);
     this.dealNewCardToPlayer(player, move.card);
@@ -132,7 +161,7 @@ export default class Game {
           return;
         }
         this.display();
-        this.nextPlayerMove(player, playerAlgoMethod, true);
+        this.nextPlayerMove(player, algorithm, true);
         return;
       case MoveType.REMOVE_CHIP:
         if (move.position == null) {
@@ -151,6 +180,61 @@ export default class Game {
     // if remove chip - validate card is open and is not part of a sequence
 
     // otherwise replace player's card from the deck
+  }
+
+  /*  Move object structure passed is not instance of 
+      Move, Card & Position classes. So we cannot call methods on 
+      these classes e.g. card.isTwoEyedJack().
+   */
+  private createMoveClassObject(tempMove: Move): Move {
+    return new Move(
+      tempMove.type,
+      new Card(tempMove.card.rank, tempMove.card.suit),
+      tempMove.position != null
+        ? new Position(tempMove.position.row, tempMove.position.col)
+        : tempMove.position
+    );
+  }
+
+  private validateMoveStructure(move: Move) {
+    if (move == null) {
+      throw Error("Move cannot be null or undefined");
+    }
+
+    if (
+      move.type == null ||
+      !(
+        move.type === MoveType.REMOVE_CHIP ||
+        move.type === MoveType.PLACE_CHIP ||
+        move.type === MoveType.REPLACE_DEAD_CARD
+      )
+    ) {
+      console.log("Move", move);
+      throw Error(`Invalid move structure. move.type must be number 1,2 or 3.`);
+    }
+
+    if (move.card == null || move.card.suit == null || move.card.rank == null) {
+      console.log("Move", move);
+      throw Error(`Invalid move structure. move.card should have suit & rank.`);
+    }
+
+    Suit.validate(move.card.suit);
+    Rank.validate(move.card.rank);
+
+    if (
+      move.type !== MoveType.REPLACE_DEAD_CARD &&
+      (move.position == null ||
+        move.position.row == null ||
+        move.position.col == null ||
+        move.position.row < 0 ||
+        move.position.row > 9 ||
+        move.position.col < 0 ||
+        move.position.col > 9)
+    ) {
+      console.log("Move", move);
+      throw Error(`Invalid move structure. move.position must have row & col attributes 
+      with values between 0 & 9 inclusive.`);
+    }
   }
 
   private validateRemoveChip(move: Move, player: Player) {
@@ -197,7 +281,7 @@ export default class Game {
       }
     }
 
-    throw new Error(`Card should belong to player's hand: ${card.toString}`);
+    throw new Error(`Card should belong to player's hand: ${card.toString()}`);
   }
 
   private display() {
@@ -206,13 +290,12 @@ export default class Game {
     this.player2.display(this.player2DisplayDiv);
   }
 
-  // TODO: complete it
   private isGameOver(player: Player): boolean {
     return GameOverCalculator.calculate(this.board, player.chipColor);
   }
 
   private markGameOver(message: string) {
-    this.resultHeader.innerText = message;
+    this.resultHeader.innerHTML = message;
     this.resultHeader.style.display = "block";
     console.log(this);
     if (this.gameInterval != null) {
@@ -241,7 +324,7 @@ export default class Game {
     const h1 = document.createElement("h1");
     h1.id = "resultHeading";
     h1.style.display = "none";
-    h1.style.fontSize = "50px";
+    h1.style.fontSize = GAME_CONFIG.RESULT_DIV_FONT_SIZE;
     h1.style.cssFloat = "right";
     this.appendElementToBody(h1);
 
@@ -251,7 +334,7 @@ export default class Game {
   createPlayerCardsHolder(id: string): HTMLDivElement {
     const div = document.createElement("div");
     div.id = id;
-    div.style.fontSize = "18px";
+    div.style.fontSize = GAME_CONFIG.PLAYER_CARDS_DIV_FONT_SIZE;
     this.appendElementToBody(div);
 
     return div;

@@ -2,6 +2,7 @@ import ChipColor from "./ChipColor";
 
 export default class Chip {
   readonly color: ChipColor;
+  readonly isChip: boolean = true;
   private inSequence: boolean;
   constructor(color: ChipColor, inSequence = false) {
     this.color = color;

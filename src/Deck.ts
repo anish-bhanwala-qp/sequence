@@ -19,7 +19,7 @@ export default class Deck {
     this.addCardsForSuit(Suit.SPADE);
   }
 
-  private addCardsForSuit(suit: Suit) {
+  private addCardsForSuit(suit: number) {
     this.cards.push(new Card(Rank.ACE, suit));
     this.cards.push(new Card(Rank.TWO, suit));
     this.cards.push(new Card(Rank.THREE, suit));

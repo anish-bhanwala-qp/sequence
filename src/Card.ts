@@ -2,11 +2,21 @@ import Rank from "./Rank";
 import Suit from "./Suit";
 
 export default class Card {
-  rank: Rank;
-  suit: Suit;
-  constructor(rank: Rank, suit: Suit) {
+  readonly rank: number;
+  readonly suit: number;
+  readonly twoEyedJack: boolean;
+  readonly oneEyedJack: boolean;
+  constructor(rank: number, suit: number) {
+    if (suit < 1 || suit > 4) {
+      throw new Error(`Invalid suit value: ${suit}`);
+    }
+    if (rank < 1 || rank > 13) {
+      throw new Error(`Invalid rank value: ${rank}`);
+    }
     this.rank = rank;
     this.suit = suit;
+    this.twoEyedJack = this.isTwoEyedJack();
+    this.oneEyedJack = this.isOneEyedJack();
   }
 
   public isTwoEyedJack(): boolean {
@@ -29,7 +39,7 @@ export default class Card {
   }
 
   public toString(): string {
-    return `Rank: ${Rank[this.rank]}, Suit: ${Suit[this.suit]}`;
+    return `Rank: ${this.rankDisplay()}, Suit: ${Suit.text(this.suit)}`;
   }
 
   public clone(): Card {
@@ -37,17 +47,7 @@ export default class Card {
   }
 
   public rankDisplay() {
-    if (this.rank === Rank.ACE) {
-      return "A";
-    } else if (this.rank === Rank.JACK) {
-      return "J";
-    } else if (this.rank === Rank.QUEEN) {
-      return "Q";
-    } else if (this.rank === Rank.KING) {
-      return "K";
-    } else {
-      return this.rank;
-    }
+    return Rank.text(this.rank);
   }
 
   public suitDisplay() {
@@ -61,7 +61,7 @@ export default class Card {
       case Suit.CLUB:
         return "\u{2663}";
       default:
-        throw new Error(`Invalid suit: ${Suit[this.suit]}`);
+        throw new Error(`Invalid suit: ${Suit.text(this.suit)}`);
     }
   }
 
@@ -74,7 +74,7 @@ export default class Card {
       case Suit.DIAMOND:
         return "red";
       default:
-        throw new Error(`Invalid suit: ${Suit[this.suit]}`);
+        throw new Error(`Invalid suit: ${Suit.text(this.suit)}`);
     }
   }
 

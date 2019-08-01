@@ -1,5 +1,6 @@
 import Card from "./Card";
 import ChipColor from "./ChipColor";
+import GAME_CONFIG from "./GAME_CONFIG";
 
 export default class Player {
   readonly name: string;
@@ -68,7 +69,9 @@ export default class Player {
         .map(
           c =>
             c.getDisplayHtml() +
-            `<span style="font-size:10px;">(${index++})</span>`
+            `<span style="font-size:${
+              GAME_CONFIG.PLAYER_CARDS_INDEX_FONT_SIZE
+            };">(${index++})</span>`
         )
         .join(", ");
   }
