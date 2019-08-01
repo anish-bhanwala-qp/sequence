@@ -4,74 +4,69 @@ import MoveType from "./MoveType";
 import Position from "./Position";
 import Chip from "./Chip";
 
-export default class Computer {
-  public nextMove(
-    boardCards: (Card | null | Chip)[][],
-    playerCards: Card[]
-  ): Move {
-    const positions: Position[] = [];
-    for (let i = 0; i < playerCards.length; i++) {
-      const card = playerCards[i];
-      const position = this.findCardPosition(boardCards, card);
+export default function nextMove(
+  boardCards: (Card | null | Chip)[][],
+  playerCards: Card[]
+): Move {
+  const positions: Position[] = [];
+  for (let i = 0; i < playerCards.length; i++) {
+    const card = playerCards[i];
+    const position = findCardPosition(boardCards, card);
 
-      // We have dead card need to replace it
-      if (position == null) {
-        return new Move(MoveType.REPLACE_DEAD_CARD, card);
-      }
-
-      positions.push(position);
+    // We have dead card need to replace it
+    if (position == null) {
+      return new Move(MoveType.REPLACE_DEAD_CARD, card);
     }
 
-    const nearestPosition = this.findNearestPositionTo(
-      new Position(5, 5),
-      positions
-    );
+    positions.push(position);
+  }
 
-    const card = boardCards[nearestPosition.row][nearestPosition.col];
-    if (!(card instanceof Card)) {
-      throw Error(`no card at position: ${nearestPosition.toString()}`);
+  const nearestPosition = findNearestPositionTo(new Position(5, 5), positions);
+
+  const card = boardCards[nearestPosition.row][nearestPosition.col];
+  if (!(card instanceof Card)) {
+    throw Error(`no card at position: ${nearestPosition.toString()}`);
+  }
+  return new Move(MoveType.PLACE_CHIP, card, nearestPosition);
+}
+
+function findNearestPositionTo(
+  referencePosition: Position,
+  positions: Position[]
+): Position {
+  let nearestPosition: Position = positions[0];
+  let shortestDistance = distance(referencePosition, positions[0]);
+  positions.forEach(p => {
+    const dist = distance(referencePosition, p);
+    if (dist < shortestDistance) {
+      nearestPosition = p;
+      shortestDistance = dist;
     }
-    return new Move(MoveType.PLACE_CHIP, card, nearestPosition);
-  }
+  });
 
-  private findNearestPositionTo(
-    referencePosition: Position,
-    positions: Position[]
-  ): Position {
-    let nearestPosition: Position = positions[0];
-    let shortestDistance = this.distance(referencePosition, positions[0]);
-    positions.forEach(p => {
-      const dist = this.distance(referencePosition, p);
-      if (dist < shortestDistance) {
-        nearestPosition = p;
-        shortestDistance = dist;
-      }
-    });
+  return nearestPosition;
+}
 
-    return nearestPosition;
-  }
+function distance(point1: Position, point2: Position): number {
+  const a = point2.col - point1.col;
+  const b = point2.row - point1.row;
 
-  private distance(point1: Position, point2: Position): number {
-    const a = point2.col - point1.col;
-    const b = point2.row - point1.row;
+  return Math.sqrt(a * a + b * b);
+}
 
-    return Math.sqrt(a * a + b * b);
-  }
-
-  private findCardPosition(
-    boardCards: (Card | null | Chip)[][],
-    playerCard: Card
-  ): Position | null {
-    for (let row = 0; row < boardCards.length; row++) {
-      const rowCards = boardCards[row];
-      for (let col = 0; col < rowCards.length; col++) {
-        const card = rowCards[col];
-        if (card instanceof Card && playerCard.matches(card)) {
-          return new Position(row, col);
-        }
+function findCardPosition(
+  boardCards: (Card | null | Chip)[][],
+  playerCard: Card
+): Position | null {
+  for (let row = 0; row < boardCards.length; row++) {
+    const rowCards = boardCards[row];
+    for (let col = 0; col < rowCards.length; col++) {
+      const card = rowCards[col];
+      if (card instanceof Card && playerCard.matches(card)) {
+        return new Position(row, col);
       }
     }
-
-    return null;
   }
+
+  return null;
 }

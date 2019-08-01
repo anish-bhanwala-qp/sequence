@@ -11,6 +11,11 @@ import ChipColor from "./ChipColor";
 import GameOverCalculator from "./GameOverCalculator";
 import Computer2 from "./Computer2";
 
+type playerAlgoMethodSignature = (
+  boardCards: (Card | null | Chip)[][],
+  playerCards: Card[]
+) => Move;
+
 export default class Game {
   private readonly player1: Player;
   private readonly player2: Player;
@@ -20,36 +25,36 @@ export default class Game {
   private readonly resultHeader: HTMLHeadElement;
   private readonly player1DisplayDiv: HTMLDivElement;
   private readonly player2DisplayDiv: HTMLDivElement;
-  private readonly computer1: Computer;
-  private readonly computer2: Computer2;
+  private readonly computer1: playerAlgoMethodSignature;
+  private readonly computer2: playerAlgoMethodSignature;
   private gameInterval?: NodeJS.Timeout;
 
   constructor(
-    canvas: HTMLCanvasElement,
-    resultHeader: HTMLHeadingElement,
-    player1DisplayDiv: HTMLDivElement,
-    player2DisplayDiv: HTMLDivElement
+    player1Name: string,
+    player1MoveAlgo: playerAlgoMethodSignature,
+    player2Name: string,
+    player2MoveAlgo: playerAlgoMethodSignature
   ) {
-    this.canvas = canvas;
-    this.resultHeader = resultHeader;
-    this.player1DisplayDiv = player1DisplayDiv;
-    this.player2DisplayDiv = player2DisplayDiv;
+    this.canvas = this.createCanvas();
+    this.resultHeader = this.createResultHeading();
+    this.player1DisplayDiv = this.createPlayerCardsHolder("player1DisplayDiv");
+    this.player2DisplayDiv = this.createPlayerCardsHolder("player2DisplayDiv");
 
     this.player1 = new Player(
-      "computer1",
+      player1Name,
       GAME_CONFIG.NUMBER_OF_CARDS_TWO_PLAYER,
       false,
       ChipColor.GREEN
     );
     this.player2 = new Player(
-      "computer2",
+      player2Name,
       GAME_CONFIG.NUMBER_OF_CARDS_TWO_PLAYER,
       true,
       ChipColor.RED
     );
 
-    this.computer1 = new Computer();
-    this.computer2 = new Computer2();
+    this.computer1 = player1MoveAlgo;
+    this.computer2 = player2MoveAlgo;
 
     this.board = new Board();
     this.deck = new Deck();
@@ -95,14 +100,11 @@ export default class Game {
 
   private nextPlayerMove(
     player: Player,
-    computer: Computer | Computer2,
+    playerAlgoMethod: playerAlgoMethodSignature,
     secondTurn = false
   ) {
     // clone cards before giving it to the external call
-    const move = computer.nextMove(
-      this.board.cloneSlots(),
-      player.cloneCards()
-    );
+    const move = playerAlgoMethod(this.board.cloneSlots(), player.cloneCards());
 
     // validate move has valid fields
     // validate player has this card
@@ -127,7 +129,7 @@ export default class Game {
           return;
         }
 
-        this.nextPlayerMove(player, computer, true);
+        this.nextPlayerMove(player, playerAlgoMethod, true);
         return;
       case MoveType.REMOVE_CHIP:
         if (move.position == null) {
@@ -230,5 +232,40 @@ export default class Game {
   private dealNewCardToPlayer(player: Player, oldCard: Card) {
     player.discardCard(oldCard);
     this.dealCardToPlayer(player);
+  }
+
+  createResultHeading(): HTMLHeadingElement {
+    const h1 = document.createElement("h1");
+    h1.id = "resultHeading";
+    h1.style.display = "none";
+    h1.style.fontSize = "50px";
+    h1.style.cssFloat = "right";
+    this.appendElementToBody(h1);
+
+    return h1;
+  }
+
+  createPlayerCardsHolder(id: string): HTMLDivElement {
+    const div = document.createElement("div");
+    div.id = id;
+    div.style.fontSize = "18px";
+    this.appendElementToBody(div);
+
+    return div;
+  }
+
+  createCanvas(): HTMLCanvasElement {
+    const canvas = document.createElement("canvas");
+    canvas.width = GAME_CONFIG.CANVAS_WIDTH;
+    canvas.height = GAME_CONFIG.CANVAS_HEIGHT;
+    canvas.id = "canvasId";
+
+    this.appendElementToBody(canvas);
+    return canvas;
+  }
+
+  appendElementToBody(element: any) {
+    const body = document.getElementsByTagName("body")[0];
+    body.appendChild(element);
   }
 }
