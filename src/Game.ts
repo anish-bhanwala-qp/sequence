@@ -1,5 +1,5 @@
 import Player from "./Player";
-import Board, { DEFAULT_BOARD_STATE } from "./Board";
+import Board from "./Board";
 import Deck from "./Deck";
 import GAME_CONFIG from "./GAME_CONFIG";
 import Move from "./Move";
@@ -19,6 +19,7 @@ export default class Game {
   private readonly canvas: HTMLCanvasElement;
   private readonly computer1: Computer;
   private readonly computer2: Computer2;
+  private gameInterval: number | undefined;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -50,7 +51,10 @@ export default class Game {
     this.dealCards(this.player2);
 
     this.board.displayBoard(this.canvas);
-    this.playOneRound();
+    // @ts-ignore
+    this.gameInterval = setInterval(() => {
+      this.playOneRound();
+    }, 200);
   }
 
   private playOneRound() {
@@ -60,7 +64,9 @@ export default class Game {
 
       // check if game is over and player won the game
       if (this.isGameOver(this.player1)) {
-        this.markGameOver(`${this.player1.name} wins!`);
+        setTimeout(()=> {
+          this.markGameOver(`${this.player1.name} wins!`);
+        },300);
         return;
       }
 
@@ -69,13 +75,12 @@ export default class Game {
 
       // check if game is over and player won the game
       if (this.isGameOver(this.player2)) {
-        this.markGameOver(`${this.player2.name} wins!`);
+        setTimeout(()=> {
+          this.markGameOver(`${this.player2.name} wins!`);
+        },300);
         return;
       }
 
-      setTimeout(() => {
-        this.playOneRound();
-      }, GAME_CONFIG.TURN_INTERVAL);
     } catch (e) {
       console.log(e, this);
       this.markGameOver(e.message);
@@ -179,6 +184,7 @@ export default class Game {
   private markGameOver(message: string) {
     alert(message);
     console.log(this);
+    clearInterval(this.gameInterval);
     this.board.displayBoard(this.canvas);
     // clearInterval(this.interval);
   }

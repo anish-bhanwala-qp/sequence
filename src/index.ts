@@ -10,7 +10,6 @@ console.log(game);
 console.log("testing", new Deck(), new Board().verifyBoard());
 
 new Board().displayBoard(canvas);
-game.start();
 
 function createCanvas() {
   const canvas = document.createElement("canvas");
