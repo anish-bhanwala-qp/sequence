@@ -235,19 +235,30 @@ export default class Board {
     chip: Chip,
     position: Position
   ) {
-    this.drawBorderedRect(ctx, position, chip.color);
+    const card = DEFAULT_BOARD_STATE[position.row][position.col];
+    if (!(card instanceof Card)) {
+      throw Error(`Card not found at position: ${position.toString()}`);
+    }
+
+    this.drawCard(ctx, card, position);
+
+    const halfWidth = GAME_CONFIG.CARD_SIZE / 2;
+    const y = position.row * GAME_CONFIG.CARD_SIZE + halfWidth;
+    const x = position.col * GAME_CONFIG.CARD_SIZE + halfWidth;
 
     if (chip.isInSequence()) {
-      console.log("Drawing in sequence");
-      const halfWidth = GAME_CONFIG.CARD_SIZE / 2;
-      const width = GAME_CONFIG.CARD_SIZE;
-      const y = position.row * GAME_CONFIG.CARD_SIZE + halfWidth;
-      const x = position.col * GAME_CONFIG.CARD_SIZE + halfWidth;
-
-      ctx.fillStyle = "#FFFFFF";
+      ctx.fillStyle = "#000";
       ctx.beginPath();
       ctx.arc(x, y, 20, 0, 2 * Math.PI, false);
-      ctx.stroke();
+      ctx.fill();
+    }
+    ctx.fillStyle = chip.color;
+    ctx.beginPath();
+    const radius = chip.isInSequence() ? 10 : 20;
+    ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+    ctx.fill();
+    if (chip.isInSequence()) {
+      console.log("Drawing in sequence");
     }
   }
 

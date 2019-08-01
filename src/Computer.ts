@@ -16,8 +16,7 @@ export default class Computer {
 
       // We have dead card need to replace it
       if (position == null) {
-        //return new Move(MoveType.REPLACE_DEAD_CARD, card);
-        continue;
+        return new Move(MoveType.REPLACE_DEAD_CARD, card);      
       }
 
       positions.push(position);

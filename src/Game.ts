@@ -19,7 +19,7 @@ export default class Game {
   private readonly canvas: HTMLCanvasElement;
   private readonly computer1: Computer;
   private readonly computer2: Computer2;
-  private gameInterval: number | undefined;
+  private gameInterval?: NodeJS.Timeout;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -51,7 +51,6 @@ export default class Game {
     this.dealCards(this.player2);
 
     this.board.displayBoard(this.canvas);
-    // @ts-ignore
     this.gameInterval = setInterval(() => {
       this.playOneRound();
     }, 200);
@@ -64,9 +63,9 @@ export default class Game {
 
       // check if game is over and player won the game
       if (this.isGameOver(this.player1)) {
-        setTimeout(()=> {
+        setTimeout(() => {
           this.markGameOver(`${this.player1.name} wins!`);
-        },300);
+        }, 300);
         return;
       }
 
@@ -75,12 +74,11 @@ export default class Game {
 
       // check if game is over and player won the game
       if (this.isGameOver(this.player2)) {
-        setTimeout(()=> {
+        setTimeout(() => {
           this.markGameOver(`${this.player2.name} wins!`);
-        },300);
+        }, 300);
         return;
       }
-
     } catch (e) {
       console.log(e, this);
       this.markGameOver(e.message);
@@ -184,7 +182,9 @@ export default class Game {
   private markGameOver(message: string) {
     alert(message);
     console.log(this);
-    clearInterval(this.gameInterval);
+    if (this.gameInterval != null) {
+      clearInterval(this.gameInterval);
+    }
     this.board.displayBoard(this.canvas);
     // clearInterval(this.interval);
   }
