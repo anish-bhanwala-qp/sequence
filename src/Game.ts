@@ -135,6 +135,7 @@ export default class Game {
         }
         this.validateRemoveChip(move, player);
         this.board.removeChip(move.position);
+        return;
       default:
         throw new Error(`Invalid move type: ${move.type}`);
     }
@@ -156,9 +157,11 @@ export default class Game {
       throw Error(`Invalid position [${move.position}]`);
     }
 
-    const space = this.board.slots[(move.position.row, move.position.col)];
+    const space = this.board.slots[move.position.row][move.position.col];
     if (!(space instanceof Chip)) {
-      throw Error(`There is no chip at position: ${move.position.toString()}`);
+      throw Error(
+        `There is no chip at position: ${move.position.toString()} ${space}`
+      );
     }
 
     if (space.color === player.chipColor) {

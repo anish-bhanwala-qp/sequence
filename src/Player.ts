@@ -60,7 +60,16 @@ export default class Player {
   }
 
   public display(div: HTMLDivElement) {
+    let index = 0;
     div.innerHTML =
-      this.name + ": " + this.cards.map(c => c.getDisplayHtml()).join(", ");
+      this.name +
+      ": " +
+      this.cards
+        .map(
+          c =>
+            c.getDisplayHtml() +
+            `<span style="font-size:10px;">(${index++})</span>`
+        )
+        .join(", ");
   }
 }

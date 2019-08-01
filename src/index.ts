@@ -1,6 +1,4 @@
 import Game from "./Game";
-import Deck from "./Deck";
-import Board from "./Board";
 import GAME_CONFIG from "./GAME_CONFIG";
 
 const canvas = createCanvas();

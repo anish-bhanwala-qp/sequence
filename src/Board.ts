@@ -163,7 +163,11 @@ export default class Board {
       throw Error(`Card cannot be placed at four corners`);
     }
 
-    if (elementAtPos instanceof Card && playerCard.matches(elementAtPos)) {
+    // Either the card should match or it should be two eyed jack
+    if (
+      elementAtPos instanceof Card &&
+      (playerCard.isTwoEyedJack() || playerCard.matches(elementAtPos))
+    ) {
       return;
     }
 
@@ -283,6 +287,13 @@ export default class Board {
       `${card.rankDisplay()}`,
       textX,
       textY - GAME_CONFIG.RANK_Y_OFFSET
+    );
+
+    ctx.font = "10px Arial";
+    ctx.fillText(
+      `(${position.row}, ${position.col})`,
+      textX,
+      textY - GAME_CONFIG.RANK_Y_OFFSET + 10
     );
 
     ctx.fillStyle = card.suitColor();
