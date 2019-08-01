@@ -171,6 +171,8 @@ export default class Board {
       return;
     }
 
+    console.log(elementAtPos);
+
     throw Error(
       `Card at: ${row}, ${col} in deck is: ${
         elementAtPos == null ? "corner" : elementAtPos.toString()
