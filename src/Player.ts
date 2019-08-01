@@ -62,7 +62,7 @@ export default class Player {
   public display(div: HTMLDivElement) {
     let index = 0;
     div.innerHTML =
-      this.name +
+      `<span style="color: ${this.chipColor}">${this.name}</span>` +
       ": " +
       this.cards
         .map(

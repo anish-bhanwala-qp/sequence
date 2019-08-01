@@ -128,7 +128,7 @@ export default class Game {
         if (secondTurn) {
           return;
         }
-
+        this.display();
         this.nextPlayerMove(player, playerAlgoMethod, true);
         return;
       case MoveType.REMOVE_CHIP:
