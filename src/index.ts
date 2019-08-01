@@ -3,7 +3,7 @@ import Computer from "./Computer";
 import Computer2 from "./Computer2";
 import ManualUser from "./ManualUser";
 
-const game = new Game("computer2", Computer2, "computer", Computer);
+const game = new Game("computer2", Computer2, "manual", ManualUser);
 // console.log(game);
 
 // @ts-ignore

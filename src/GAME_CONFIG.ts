@@ -40,4 +40,6 @@ const LARGE = Object.freeze({
   RESULT_DIV_FONT_SIZE: "50px"
 });
 
-export default LARGE;
+const GAME_CONFIG = LARGE;
+
+export default GAME_CONFIG;

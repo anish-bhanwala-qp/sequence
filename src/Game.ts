@@ -86,7 +86,7 @@ export default class Game {
         this.nextPlayerMove(this.player1, this.computer1);
         this.display();
       } catch (e) {
-        console.log(e);
+        console.error(e);
         this.markGameOver(
           `${this.player2.name} won because of other player's 
           error: <small style="color: #848484">${e.message}</small>`
@@ -104,7 +104,7 @@ export default class Game {
         this.nextPlayerMove(this.player2, this.computer2);
         this.display();
       } catch (e) {
-        console.log(e);
+        console.error(e);
         this.markGameOver(
           `${this.player1.name} won because of other player's 
           error: <small style="color: #848484">${e.message}</small>`
@@ -117,7 +117,7 @@ export default class Game {
         return;
       }
     } catch (e) {
-      console.log(e, this);
+      console.error(e, this);
       this.markGameOver(`Game error: ${e.message}`);
     }
   }

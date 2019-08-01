@@ -66,13 +66,20 @@ export default class Player {
       `<span style="color: ${this.chipColor}">${this.name}</span>` +
       ": " +
       this.cards
-        .map(
-          c =>
+        .map(c => {
+          const jackEyeUnicode = c.isOneEyedJack()
+            ? "\u{1F441}"
+            : c.isTwoEyedJack()
+            ? "\u{1F440}"
+            : "";
+          return (
             c.getDisplayHtml() +
+            jackEyeUnicode +
             `<span style="font-size:${
               GAME_CONFIG.PLAYER_CARDS_INDEX_FONT_SIZE
             };">(${index++})</span>`
-        )
+          );
+        })
         .join(", ");
   }
 }
