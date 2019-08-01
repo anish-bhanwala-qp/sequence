@@ -32,9 +32,12 @@ export default class Game {
   constructor(
     player1Name: string,
     player1MoveAlgo: playerAlgoMethodSignature,
-    player2Name: string,
-    player2MoveAlgo: playerAlgoMethodSignature
+    player2Name: string = "2nd player",
+    player2MoveAlgo: playerAlgoMethodSignature = Computer
   ) {
+    if (player1MoveAlgo == null || typeof player1MoveAlgo !== "function") {
+      throw Error("Must provide game algorithm function to play");
+    }
     this.canvas = this.createCanvas();
     this.resultHeader = this.createResultHeading();
     this.player1DisplayDiv = this.createPlayerCardsHolder("player1DisplayDiv");
