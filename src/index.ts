@@ -5,7 +5,10 @@ import GAME_CONFIG from "./GAME_CONFIG";
 
 const canvas = createCanvas();
 const h1 = createResultHeading();
-const game = new Game(canvas, h1);
+const player1Display = createPlayerCardsHolder("player1Id");
+const player2Display = createPlayerCardsHolder("player2Id");
+
+const game = new Game(canvas, h1, player1Display, player2Display);
 console.log(game);
 
 function createResultHeading() {
@@ -17,6 +20,14 @@ function createResultHeading() {
   appendElementToBody(h1);
 
   return h1;
+}
+
+function createPlayerCardsHolder(id: string) {
+  const div = document.createElement("div");
+  div.id = id;
+  appendElementToBody(div);
+
+  return div;
 }
 
 function createCanvas() {

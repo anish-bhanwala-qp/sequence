@@ -18,13 +18,22 @@ export default class Game {
   private readonly deck: Deck;
   private readonly canvas: HTMLCanvasElement;
   private readonly resultHeader: HTMLHeadElement;
+  private readonly player1DisplayDiv: HTMLDivElement;
+  private readonly player2DisplayDiv: HTMLDivElement;
   private readonly computer1: Computer;
   private readonly computer2: Computer2;
   private gameInterval?: NodeJS.Timeout;
 
-  constructor(canvas: HTMLCanvasElement, resultHeader: HTMLHeadingElement) {
+  constructor(
+    canvas: HTMLCanvasElement,
+    resultHeader: HTMLHeadingElement,
+    player1DisplayDiv: HTMLDivElement,
+    player2DisplayDiv: HTMLDivElement
+  ) {
     this.canvas = canvas;
     this.resultHeader = resultHeader;
+    this.player1DisplayDiv = player1DisplayDiv;
+    this.player2DisplayDiv = player2DisplayDiv;
 
     this.player1 = new Player(
       "computer1",
@@ -56,7 +65,7 @@ export default class Game {
     this.board.displayBoard(this.canvas);
     this.gameInterval = setInterval(() => {
       this.playOneRound();
-    }, 200);
+    }, GAME_CONFIG.TURN_INTERVAL);
   }
 
   private playOneRound() {

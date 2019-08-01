@@ -16,14 +16,14 @@ export default class Computer {
 
       // We have dead card need to replace it
       if (position == null) {
-        return new Move(MoveType.REPLACE_DEAD_CARD, card);      
+        return new Move(MoveType.REPLACE_DEAD_CARD, card);
       }
 
       positions.push(position);
     }
 
     const nearestPosition = this.findNearestPositionTo(
-      new Position(0, 0),
+      new Position(5, 5),
       positions
     );
 
