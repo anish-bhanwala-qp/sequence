@@ -93,7 +93,11 @@ export default class Game {
     }
   }
 
-  private nextPlayerMove(player: Player, computer: Computer | Computer2) {
+  private nextPlayerMove(
+    player: Player,
+    computer: Computer | Computer2,
+    secondTurn = false
+  ) {
     // clone cards before giving it to the external call
     const move = computer.nextMove(
       this.board.cloneSlots(),
@@ -118,8 +122,12 @@ export default class Game {
         break;
       case MoveType.REPLACE_DEAD_CARD:
         this.validateDeadCard(player, move);
-        // TODO: detect too many recursion
-        //this.nextPlayerMove(player, computer);
+        // if trying to replace dead card again, just ignore
+        if (secondTurn) {
+          return;
+        }
+
+        this.nextPlayerMove(player, computer, true);
         return;
       case MoveType.REMOVE_CHIP:
         if (move.position == null) {
