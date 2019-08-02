@@ -308,7 +308,7 @@ export default class Game {
   private markGameOver(message: string) {
     this.resultHeader.innerHTML = message;
     this.resultHeader.style.display = "block";
-    console.log(this);
+    // console.log(this);
     if (this.turnTimeout != null) {
       clearTimeout(this.turnTimeout);
     }
