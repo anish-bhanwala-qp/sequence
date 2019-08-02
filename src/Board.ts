@@ -5,177 +5,177 @@ import Deck from "./Deck";
 import Chip from "./Chip";
 import Position from "./Position";
 import GAME_CONFIG from "./GAME_CONFIG";
+import Slot from "./Slot";
 
 export default class Board {
-  readonly slots: (Card | null | Chip)[][];
+  readonly slots: Slot[][];
   constructor() {
     this.slots = [
       [
-        null,
-        new Card(Rank.TWO, Suit.SPADE),
-        new Card(Rank.THREE, Suit.SPADE),
-        new Card(Rank.FOUR, Suit.SPADE),
-        new Card(Rank.FIVE, Suit.SPADE),
-        new Card(Rank.SIX, Suit.SPADE),
-        new Card(Rank.SEVEN, Suit.SPADE),
-        new Card(Rank.EIGHT, Suit.SPADE),
-        new Card(Rank.NINE, Suit.SPADE),
-        null
+        new Slot(true),
+        new Slot(false, new Card(Rank.TWO, Suit.SPADE)),
+        new Slot(false, new Card(Rank.THREE, Suit.SPADE)),
+        new Slot(false, new Card(Rank.FOUR, Suit.SPADE)),
+        new Slot(false, new Card(Rank.FIVE, Suit.SPADE)),
+        new Slot(false, new Card(Rank.SIX, Suit.SPADE)),
+        new Slot(false, new Card(Rank.SEVEN, Suit.SPADE)),
+        new Slot(false, new Card(Rank.EIGHT, Suit.SPADE)),
+        new Slot(false, new Card(Rank.NINE, Suit.SPADE)),
+        new Slot(true)
       ],
       [
-        new Card(Rank.SIX, Suit.CLUB),
-        new Card(Rank.FIVE, Suit.CLUB),
-        new Card(Rank.FOUR, Suit.CLUB),
-        new Card(Rank.THREE, Suit.CLUB),
-        new Card(Rank.TWO, Suit.CLUB),
-        new Card(Rank.ACE, Suit.HEART),
-        new Card(Rank.KING, Suit.HEART),
-        new Card(Rank.QUEEN, Suit.HEART),
-        new Card(Rank.TEN, Suit.HEART),
-        new Card(Rank.TEN, Suit.SPADE)
+        new Slot(false, new Card(Rank.SIX, Suit.CLUB)),
+        new Slot(false, new Card(Rank.FIVE, Suit.CLUB)),
+        new Slot(false, new Card(Rank.FOUR, Suit.CLUB)),
+        new Slot(false, new Card(Rank.THREE, Suit.CLUB)),
+        new Slot(false, new Card(Rank.TWO, Suit.CLUB)),
+        new Slot(false, new Card(Rank.ACE, Suit.HEART)),
+        new Slot(false, new Card(Rank.KING, Suit.HEART)),
+        new Slot(false, new Card(Rank.QUEEN, Suit.HEART)),
+        new Slot(false, new Card(Rank.TEN, Suit.HEART)),
+        new Slot(false, new Card(Rank.TEN, Suit.SPADE))
       ],
       [
-        new Card(Rank.SEVEN, Suit.CLUB),
-        new Card(Rank.ACE, Suit.SPADE),
-        new Card(Rank.TWO, Suit.DIAMOND),
-        new Card(Rank.THREE, Suit.DIAMOND),
-        new Card(Rank.FOUR, Suit.DIAMOND),
-        new Card(Rank.FIVE, Suit.DIAMOND),
-        new Card(Rank.SIX, Suit.DIAMOND),
-        new Card(Rank.SEVEN, Suit.DIAMOND),
-        new Card(Rank.NINE, Suit.HEART),
-        new Card(Rank.QUEEN, Suit.SPADE)
+        new Slot(false, new Card(Rank.SEVEN, Suit.CLUB)),
+        new Slot(false, new Card(Rank.ACE, Suit.SPADE)),
+        new Slot(false, new Card(Rank.TWO, Suit.DIAMOND)),
+        new Slot(false, new Card(Rank.THREE, Suit.DIAMOND)),
+        new Slot(false, new Card(Rank.FOUR, Suit.DIAMOND)),
+        new Slot(false, new Card(Rank.FIVE, Suit.DIAMOND)),
+        new Slot(false, new Card(Rank.SIX, Suit.DIAMOND)),
+        new Slot(false, new Card(Rank.SEVEN, Suit.DIAMOND)),
+        new Slot(false, new Card(Rank.NINE, Suit.HEART)),
+        new Slot(false, new Card(Rank.QUEEN, Suit.SPADE))
       ],
       [
-        new Card(Rank.EIGHT, Suit.CLUB),
-        new Card(Rank.KING, Suit.SPADE),
-        new Card(Rank.SIX, Suit.CLUB),
-        new Card(Rank.FIVE, Suit.CLUB),
-        new Card(Rank.FOUR, Suit.CLUB),
-        new Card(Rank.THREE, Suit.CLUB),
-        new Card(Rank.TWO, Suit.CLUB),
-        new Card(Rank.EIGHT, Suit.DIAMOND),
-        new Card(Rank.EIGHT, Suit.HEART),
-        new Card(Rank.KING, Suit.SPADE)
+        new Slot(false, new Card(Rank.EIGHT, Suit.CLUB)),
+        new Slot(false, new Card(Rank.KING, Suit.SPADE)),
+        new Slot(false, new Card(Rank.SIX, Suit.CLUB)),
+        new Slot(false, new Card(Rank.FIVE, Suit.CLUB)),
+        new Slot(false, new Card(Rank.FOUR, Suit.CLUB)),
+        new Slot(false, new Card(Rank.THREE, Suit.CLUB)),
+        new Slot(false, new Card(Rank.TWO, Suit.CLUB)),
+        new Slot(false, new Card(Rank.EIGHT, Suit.DIAMOND)),
+        new Slot(false, new Card(Rank.EIGHT, Suit.HEART)),
+        new Slot(false, new Card(Rank.KING, Suit.SPADE))
       ],
       [
-        new Card(Rank.NINE, Suit.CLUB),
-        new Card(Rank.QUEEN, Suit.SPADE),
-        new Card(Rank.SEVEN, Suit.CLUB),
-        new Card(Rank.SIX, Suit.HEART),
-        new Card(Rank.FIVE, Suit.HEART),
-        new Card(Rank.FOUR, Suit.HEART),
-        new Card(Rank.ACE, Suit.HEART),
-        new Card(Rank.NINE, Suit.DIAMOND),
-        new Card(Rank.SEVEN, Suit.HEART),
-        new Card(Rank.ACE, Suit.SPADE)
+        new Slot(false, new Card(Rank.NINE, Suit.CLUB)),
+        new Slot(false, new Card(Rank.QUEEN, Suit.SPADE)),
+        new Slot(false, new Card(Rank.SEVEN, Suit.CLUB)),
+        new Slot(false, new Card(Rank.SIX, Suit.HEART)),
+        new Slot(false, new Card(Rank.FIVE, Suit.HEART)),
+        new Slot(false, new Card(Rank.FOUR, Suit.HEART)),
+        new Slot(false, new Card(Rank.ACE, Suit.HEART)),
+        new Slot(false, new Card(Rank.NINE, Suit.DIAMOND)),
+        new Slot(false, new Card(Rank.SEVEN, Suit.HEART)),
+        new Slot(false, new Card(Rank.ACE, Suit.SPADE))
       ],
       [
-        new Card(Rank.TEN, Suit.CLUB),
-        new Card(Rank.TEN, Suit.SPADE),
-        new Card(Rank.EIGHT, Suit.CLUB),
-        new Card(Rank.SEVEN, Suit.HEART),
-        new Card(Rank.TWO, Suit.HEART),
-        new Card(Rank.THREE, Suit.HEART),
-        new Card(Rank.KING, Suit.HEART),
-        new Card(Rank.TEN, Suit.DIAMOND),
-        new Card(Rank.SIX, Suit.HEART),
-        new Card(Rank.TWO, Suit.DIAMOND)
+        new Slot(false, new Card(Rank.TEN, Suit.CLUB)),
+        new Slot(false, new Card(Rank.TEN, Suit.SPADE)),
+        new Slot(false, new Card(Rank.EIGHT, Suit.CLUB)),
+        new Slot(false, new Card(Rank.SEVEN, Suit.HEART)),
+        new Slot(false, new Card(Rank.TWO, Suit.HEART)),
+        new Slot(false, new Card(Rank.THREE, Suit.HEART)),
+        new Slot(false, new Card(Rank.KING, Suit.HEART)),
+        new Slot(false, new Card(Rank.TEN, Suit.DIAMOND)),
+        new Slot(false, new Card(Rank.SIX, Suit.HEART)),
+        new Slot(false, new Card(Rank.TWO, Suit.DIAMOND))
       ],
       [
-        new Card(Rank.QUEEN, Suit.CLUB),
-        new Card(Rank.NINE, Suit.SPADE),
-        new Card(Rank.NINE, Suit.CLUB),
-        new Card(Rank.EIGHT, Suit.HEART),
-        new Card(Rank.NINE, Suit.HEART),
-        new Card(Rank.TEN, Suit.HEART),
-        new Card(Rank.QUEEN, Suit.HEART),
-        new Card(Rank.QUEEN, Suit.DIAMOND),
-        new Card(Rank.FIVE, Suit.HEART),
-        new Card(Rank.THREE, Suit.DIAMOND)
+        new Slot(false, new Card(Rank.QUEEN, Suit.CLUB)),
+        new Slot(false, new Card(Rank.NINE, Suit.SPADE)),
+        new Slot(false, new Card(Rank.NINE, Suit.CLUB)),
+        new Slot(false, new Card(Rank.EIGHT, Suit.HEART)),
+        new Slot(false, new Card(Rank.NINE, Suit.HEART)),
+        new Slot(false, new Card(Rank.TEN, Suit.HEART)),
+        new Slot(false, new Card(Rank.QUEEN, Suit.HEART)),
+        new Slot(false, new Card(Rank.QUEEN, Suit.DIAMOND)),
+        new Slot(false, new Card(Rank.FIVE, Suit.HEART)),
+        new Slot(false, new Card(Rank.THREE, Suit.DIAMOND))
       ],
       [
-        new Card(Rank.KING, Suit.CLUB),
-        new Card(Rank.EIGHT, Suit.SPADE),
-        new Card(Rank.TEN, Suit.CLUB),
-        new Card(Rank.QUEEN, Suit.CLUB),
-        new Card(Rank.KING, Suit.CLUB),
-        new Card(Rank.ACE, Suit.CLUB),
-        new Card(Rank.ACE, Suit.DIAMOND),
-        new Card(Rank.KING, Suit.DIAMOND),
-        new Card(Rank.FOUR, Suit.HEART),
-        new Card(Rank.FOUR, Suit.DIAMOND)
+        new Slot(false, new Card(Rank.KING, Suit.CLUB)),
+        new Slot(false, new Card(Rank.EIGHT, Suit.SPADE)),
+        new Slot(false, new Card(Rank.TEN, Suit.CLUB)),
+        new Slot(false, new Card(Rank.QUEEN, Suit.CLUB)),
+        new Slot(false, new Card(Rank.KING, Suit.CLUB)),
+        new Slot(false, new Card(Rank.ACE, Suit.CLUB)),
+        new Slot(false, new Card(Rank.ACE, Suit.DIAMOND)),
+        new Slot(false, new Card(Rank.KING, Suit.DIAMOND)),
+        new Slot(false, new Card(Rank.FOUR, Suit.HEART)),
+        new Slot(false, new Card(Rank.FOUR, Suit.DIAMOND))
       ],
       [
-        new Card(Rank.ACE, Suit.CLUB),
-        new Card(Rank.SEVEN, Suit.SPADE),
-        new Card(Rank.SIX, Suit.SPADE),
-        new Card(Rank.FIVE, Suit.SPADE),
-        new Card(Rank.FOUR, Suit.SPADE),
-        new Card(Rank.THREE, Suit.SPADE),
-        new Card(Rank.TWO, Suit.SPADE),
-        new Card(Rank.TWO, Suit.HEART),
-        new Card(Rank.THREE, Suit.HEART),
-        new Card(Rank.FIVE, Suit.DIAMOND)
+        new Slot(false, new Card(Rank.ACE, Suit.CLUB)),
+        new Slot(false, new Card(Rank.SEVEN, Suit.SPADE)),
+        new Slot(false, new Card(Rank.SIX, Suit.SPADE)),
+        new Slot(false, new Card(Rank.FIVE, Suit.SPADE)),
+        new Slot(false, new Card(Rank.FOUR, Suit.SPADE)),
+        new Slot(false, new Card(Rank.THREE, Suit.SPADE)),
+        new Slot(false, new Card(Rank.TWO, Suit.SPADE)),
+        new Slot(false, new Card(Rank.TWO, Suit.HEART)),
+        new Slot(false, new Card(Rank.THREE, Suit.HEART)),
+        new Slot(false, new Card(Rank.FIVE, Suit.DIAMOND))
       ],
       [
-        null,
-        new Card(Rank.ACE, Suit.DIAMOND),
-        new Card(Rank.KING, Suit.DIAMOND),
-        new Card(Rank.QUEEN, Suit.DIAMOND),
-        new Card(Rank.TEN, Suit.DIAMOND),
-        new Card(Rank.NINE, Suit.DIAMOND),
-        new Card(Rank.EIGHT, Suit.DIAMOND),
-        new Card(Rank.SEVEN, Suit.DIAMOND),
-        new Card(Rank.SIX, Suit.DIAMOND),
-        null
+        new Slot(true),
+        new Slot(false, new Card(Rank.ACE, Suit.DIAMOND)),
+        new Slot(false, new Card(Rank.KING, Suit.DIAMOND)),
+        new Slot(false, new Card(Rank.QUEEN, Suit.DIAMOND)),
+        new Slot(false, new Card(Rank.TEN, Suit.DIAMOND)),
+        new Slot(false, new Card(Rank.NINE, Suit.DIAMOND)),
+        new Slot(false, new Card(Rank.EIGHT, Suit.DIAMOND)),
+        new Slot(false, new Card(Rank.SEVEN, Suit.DIAMOND)),
+        new Slot(false, new Card(Rank.SIX, Suit.DIAMOND)),
+        new Slot(true)
       ]
     ];
   }
 
   public removeChip(position: Position) {
     const slot = this.slots[position.row][position.col];
-    if (!(slot instanceof Chip)) {
+    if (slot.chip == null) {
       throw Error(
         `There is no chip to be removed at position: ${position.toString()}`
       );
     }
 
-    this.slots[position.row][position.col] =
-      DEFAULT_BOARD_STATE[position.row][position.col];
+    slot.removeChip();
   }
 
   public placeChip(chip: Chip, card: Card, position: Position) {
     this.validateChipCanBePlaced(card, position);
 
-    this.slots[position.row][position.col] = chip;
+    this.slots[position.row][position.col].placeChip(chip);
   }
 
   private validateChipCanBePlaced(playerCard: Card, position: Position) {
     const { row, col } = position;
-    const elementAtPos = this.slots[row][col];
-    if (elementAtPos instanceof Chip) {
+    const slot = this.slots[row][col];
+    if (slot.chip != null) {
       throw Error(`Chip already placed at position: ${position.toString()}`);
     }
 
     // check if its a corner
-    if (elementAtPos === null) {
+    if (slot.isCorner) {
       throw Error(`Card cannot be placed at four corners`);
     }
 
     // Either the card should match or it should be two eyed jack
     if (
-      elementAtPos instanceof Card &&
-      (playerCard.isTwoEyedJack() || playerCard.matches(elementAtPos))
+      slot.card != null &&
+      (playerCard.isTwoEyedJack() || playerCard.matches(slot.card))
     ) {
       return;
     }
 
-    console.log(elementAtPos);
+    console.log(slot);
 
     throw Error(
       `Card at: ${row}, ${col} in deck is: ${
-        elementAtPos == null ? "corner" : elementAtPos.toString()
+        slot.card == null ? "corner" : slot.card.toString()
       }, and player's card is ${playerCard.toString()}`
     );
   }
@@ -184,19 +184,15 @@ export default class Board {
     const deck = new Deck();
 
     for (let row = 0; row < this.slots.length; row = row + 1) {
-      const rowCards = this.slots[row];
-      for (let col = 0; col < rowCards.length; col = col + 1) {
-        const boardCard = rowCards[col];
-        if (boardCard == null) {
+      const slotsRow = this.slots[row];
+      for (let col = 0; col < slotsRow.length; col = col + 1) {
+        const slot = slotsRow[col];
+        if (slot.isCorner) {
           continue;
         }
         for (let i = 0; i < deck.cards.length; i++) {
           const deckCard = deck.cards[i];
-          if (
-            boardCard instanceof Card &&
-            deckCard.suit === boardCard.suit &&
-            deckCard.rank === boardCard.rank
-          ) {
+          if (slot.isEmptySlot() && slot.hasMatchingCard(deckCard)) {
             deck.cards.splice(i, 1);
             break;
           }
@@ -210,18 +206,18 @@ export default class Board {
   public displayBoard(ctx: CanvasRenderingContext2D) {
     ctx.clearRect(0, 0, GAME_CONFIG.CANVAS_WIDTH, GAME_CONFIG.CANVAS_HEIGHT);
     for (let row = 0; row < this.slots.length; row = row + 1) {
-      const rowCards = this.slots[row];
-      for (let col = 0; col < rowCards.length; col = col + 1) {
-        const boardElement = rowCards[col];
+      const slotsRow = this.slots[row];
+      for (let col = 0; col < slotsRow.length; col = col + 1) {
+        const slot = slotsRow[col];
         const position = new Position(row, col);
-        if (boardElement == null) {
+        if (slot.isCorner) {
           this.drawCorner(ctx, position);
-        } else if (boardElement instanceof Chip) {
-          this.drawChip(ctx, boardElement, position);
-        } else if (boardElement instanceof Card) {
-          this.drawCard(ctx, boardElement, position);
+        } else if (slot.chip != null) {
+          this.drawChip(ctx, slot, position);
+        } else if (slot.isEmptySlot()) {
+          this.drawCard(ctx, slot, position);
         } else {
-          throw Error(`Invalid board element: ${boardElement}`);
+          throw Error(`Invalid board element: ${slot}`);
         }
       }
     }
@@ -233,30 +229,29 @@ export default class Board {
 
   private drawChip(
     ctx: CanvasRenderingContext2D,
-    chip: Chip,
+    slot: Slot,
     position: Position
   ) {
-    const card = DEFAULT_BOARD_STATE[position.row][position.col];
-    if (!(card instanceof Card)) {
-      throw Error(`Card not found at position: ${position.toString()}`);
+    if (slot.card == null || slot.chip == null) {
+      throw Error(`Chip should be present at the slot: ${position.toString()}`);
     }
 
-    this.drawCard(ctx, card, position);
+    this.drawCard(ctx, slot, position);
 
     const halfWidth = GAME_CONFIG.CARD_SIZE / 2;
     const y = position.row * GAME_CONFIG.CARD_SIZE + halfWidth;
     const x = position.col * GAME_CONFIG.CARD_SIZE + halfWidth;
 
-    if (chip.isInSequence()) {
+    if (slot.chip.isInSequence()) {
       ctx.fillStyle = "#000";
       ctx.beginPath();
       ctx.arc(x, y, GAME_CONFIG.CHIP_RADIUS, 0, 2 * Math.PI, false);
       ctx.fill();
     }
 
-    ctx.fillStyle = chip.color;
+    ctx.fillStyle = slot.chip.color;
     ctx.beginPath();
-    const radius = chip.isInSequence()
+    const radius = slot.chip.isInSequence()
       ? GAME_CONFIG.CHIP_RADIUS / 2
       : GAME_CONFIG.CHIP_RADIUS;
     ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
@@ -265,10 +260,13 @@ export default class Board {
 
   private drawCard(
     ctx: CanvasRenderingContext2D,
-    card: Card,
+    slot: Slot,
     position: Position
   ) {
-    const thickness = 1;
+    if (slot.card == null) {
+      throw Error(`Card should be present at slot: ${position.toString()}`);
+    }
+    const card = slot.card;
     const x = position.col * GAME_CONFIG.CARD_SIZE;
     const y = position.row * GAME_CONFIG.CARD_SIZE;
 
@@ -319,10 +317,10 @@ export default class Board {
     );
   }
 
-  public cloneSlots(): (Card | null | Chip)[][] {
-    const slots: (Card | null | Chip)[][] = [];
+  public cloneSlots(): Slot[][] {
+    const slots: Slot[][] = [];
     this.slots.map(row => {
-      slots.push(row.map(col => (col === null ? col : col.clone())));
+      slots.push(row.map(slot => slot.clone()));
     });
 
     return slots;
@@ -331,123 +329,123 @@ export default class Board {
 
 export const DEFAULT_BOARD_STATE = [
   [
-    null,
-    new Card(Rank.TWO, Suit.SPADE),
-    new Card(Rank.THREE, Suit.SPADE),
-    new Card(Rank.FOUR, Suit.SPADE),
-    new Card(Rank.FIVE, Suit.SPADE),
-    new Card(Rank.SIX, Suit.SPADE),
-    new Card(Rank.SEVEN, Suit.SPADE),
-    new Card(Rank.EIGHT, Suit.SPADE),
-    new Card(Rank.NINE, Suit.SPADE),
-    null
+    new Slot(true),
+    new Slot(false, new Card(Rank.TWO, Suit.SPADE)),
+    new Slot(false, new Card(Rank.THREE, Suit.SPADE)),
+    new Slot(false, new Card(Rank.FOUR, Suit.SPADE)),
+    new Slot(false, new Card(Rank.FIVE, Suit.SPADE)),
+    new Slot(false, new Card(Rank.SIX, Suit.SPADE)),
+    new Slot(false, new Card(Rank.SEVEN, Suit.SPADE)),
+    new Slot(false, new Card(Rank.EIGHT, Suit.SPADE)),
+    new Slot(false, new Card(Rank.NINE, Suit.SPADE)),
+    new Slot(true)
   ],
   [
-    new Card(Rank.SIX, Suit.CLUB),
-    new Card(Rank.FIVE, Suit.CLUB),
-    new Card(Rank.FOUR, Suit.CLUB),
-    new Card(Rank.THREE, Suit.CLUB),
-    new Card(Rank.TWO, Suit.CLUB),
-    new Card(Rank.ACE, Suit.HEART),
-    new Card(Rank.KING, Suit.HEART),
-    new Card(Rank.QUEEN, Suit.HEART),
-    new Card(Rank.TEN, Suit.HEART),
-    new Card(Rank.TEN, Suit.SPADE)
+    new Slot(false, new Card(Rank.SIX, Suit.CLUB)),
+    new Slot(false, new Card(Rank.FIVE, Suit.CLUB)),
+    new Slot(false, new Card(Rank.FOUR, Suit.CLUB)),
+    new Slot(false, new Card(Rank.THREE, Suit.CLUB)),
+    new Slot(false, new Card(Rank.TWO, Suit.CLUB)),
+    new Slot(false, new Card(Rank.ACE, Suit.HEART)),
+    new Slot(false, new Card(Rank.KING, Suit.HEART)),
+    new Slot(false, new Card(Rank.QUEEN, Suit.HEART)),
+    new Slot(false, new Card(Rank.TEN, Suit.HEART)),
+    new Slot(false, new Card(Rank.TEN, Suit.SPADE))
   ],
   [
-    new Card(Rank.SEVEN, Suit.CLUB),
-    new Card(Rank.ACE, Suit.SPADE),
-    new Card(Rank.TWO, Suit.DIAMOND),
-    new Card(Rank.THREE, Suit.DIAMOND),
-    new Card(Rank.FOUR, Suit.DIAMOND),
-    new Card(Rank.FIVE, Suit.DIAMOND),
-    new Card(Rank.SIX, Suit.DIAMOND),
-    new Card(Rank.SEVEN, Suit.DIAMOND),
-    new Card(Rank.NINE, Suit.HEART),
-    new Card(Rank.QUEEN, Suit.SPADE)
+    new Slot(false, new Card(Rank.SEVEN, Suit.CLUB)),
+    new Slot(false, new Card(Rank.ACE, Suit.SPADE)),
+    new Slot(false, new Card(Rank.TWO, Suit.DIAMOND)),
+    new Slot(false, new Card(Rank.THREE, Suit.DIAMOND)),
+    new Slot(false, new Card(Rank.FOUR, Suit.DIAMOND)),
+    new Slot(false, new Card(Rank.FIVE, Suit.DIAMOND)),
+    new Slot(false, new Card(Rank.SIX, Suit.DIAMOND)),
+    new Slot(false, new Card(Rank.SEVEN, Suit.DIAMOND)),
+    new Slot(false, new Card(Rank.NINE, Suit.HEART)),
+    new Slot(false, new Card(Rank.QUEEN, Suit.SPADE))
   ],
   [
-    new Card(Rank.EIGHT, Suit.CLUB),
-    new Card(Rank.KING, Suit.SPADE),
-    new Card(Rank.SIX, Suit.CLUB),
-    new Card(Rank.FIVE, Suit.CLUB),
-    new Card(Rank.FOUR, Suit.CLUB),
-    new Card(Rank.THREE, Suit.CLUB),
-    new Card(Rank.TWO, Suit.CLUB),
-    new Card(Rank.EIGHT, Suit.DIAMOND),
-    new Card(Rank.EIGHT, Suit.HEART),
-    new Card(Rank.KING, Suit.SPADE)
+    new Slot(false, new Card(Rank.EIGHT, Suit.CLUB)),
+    new Slot(false, new Card(Rank.KING, Suit.SPADE)),
+    new Slot(false, new Card(Rank.SIX, Suit.CLUB)),
+    new Slot(false, new Card(Rank.FIVE, Suit.CLUB)),
+    new Slot(false, new Card(Rank.FOUR, Suit.CLUB)),
+    new Slot(false, new Card(Rank.THREE, Suit.CLUB)),
+    new Slot(false, new Card(Rank.TWO, Suit.CLUB)),
+    new Slot(false, new Card(Rank.EIGHT, Suit.DIAMOND)),
+    new Slot(false, new Card(Rank.EIGHT, Suit.HEART)),
+    new Slot(false, new Card(Rank.KING, Suit.SPADE))
   ],
   [
-    new Card(Rank.NINE, Suit.CLUB),
-    new Card(Rank.QUEEN, Suit.SPADE),
-    new Card(Rank.SEVEN, Suit.CLUB),
-    new Card(Rank.SIX, Suit.HEART),
-    new Card(Rank.FIVE, Suit.HEART),
-    new Card(Rank.FOUR, Suit.HEART),
-    new Card(Rank.ACE, Suit.HEART),
-    new Card(Rank.NINE, Suit.DIAMOND),
-    new Card(Rank.SEVEN, Suit.HEART),
-    new Card(Rank.ACE, Suit.SPADE)
+    new Slot(false, new Card(Rank.NINE, Suit.CLUB)),
+    new Slot(false, new Card(Rank.QUEEN, Suit.SPADE)),
+    new Slot(false, new Card(Rank.SEVEN, Suit.CLUB)),
+    new Slot(false, new Card(Rank.SIX, Suit.HEART)),
+    new Slot(false, new Card(Rank.FIVE, Suit.HEART)),
+    new Slot(false, new Card(Rank.FOUR, Suit.HEART)),
+    new Slot(false, new Card(Rank.ACE, Suit.HEART)),
+    new Slot(false, new Card(Rank.NINE, Suit.DIAMOND)),
+    new Slot(false, new Card(Rank.SEVEN, Suit.HEART)),
+    new Slot(false, new Card(Rank.ACE, Suit.SPADE))
   ],
   [
-    new Card(Rank.TEN, Suit.CLUB),
-    new Card(Rank.TEN, Suit.SPADE),
-    new Card(Rank.EIGHT, Suit.CLUB),
-    new Card(Rank.SEVEN, Suit.HEART),
-    new Card(Rank.TWO, Suit.HEART),
-    new Card(Rank.THREE, Suit.HEART),
-    new Card(Rank.KING, Suit.HEART),
-    new Card(Rank.TEN, Suit.DIAMOND),
-    new Card(Rank.SIX, Suit.HEART),
-    new Card(Rank.TWO, Suit.DIAMOND)
+    new Slot(false, new Card(Rank.TEN, Suit.CLUB)),
+    new Slot(false, new Card(Rank.TEN, Suit.SPADE)),
+    new Slot(false, new Card(Rank.EIGHT, Suit.CLUB)),
+    new Slot(false, new Card(Rank.SEVEN, Suit.HEART)),
+    new Slot(false, new Card(Rank.TWO, Suit.HEART)),
+    new Slot(false, new Card(Rank.THREE, Suit.HEART)),
+    new Slot(false, new Card(Rank.KING, Suit.HEART)),
+    new Slot(false, new Card(Rank.TEN, Suit.DIAMOND)),
+    new Slot(false, new Card(Rank.SIX, Suit.HEART)),
+    new Slot(false, new Card(Rank.TWO, Suit.DIAMOND))
   ],
   [
-    new Card(Rank.QUEEN, Suit.CLUB),
-    new Card(Rank.NINE, Suit.SPADE),
-    new Card(Rank.NINE, Suit.CLUB),
-    new Card(Rank.EIGHT, Suit.HEART),
-    new Card(Rank.NINE, Suit.HEART),
-    new Card(Rank.TEN, Suit.HEART),
-    new Card(Rank.QUEEN, Suit.HEART),
-    new Card(Rank.QUEEN, Suit.DIAMOND),
-    new Card(Rank.FIVE, Suit.HEART),
-    new Card(Rank.THREE, Suit.DIAMOND)
+    new Slot(false, new Card(Rank.QUEEN, Suit.CLUB)),
+    new Slot(false, new Card(Rank.NINE, Suit.SPADE)),
+    new Slot(false, new Card(Rank.NINE, Suit.CLUB)),
+    new Slot(false, new Card(Rank.EIGHT, Suit.HEART)),
+    new Slot(false, new Card(Rank.NINE, Suit.HEART)),
+    new Slot(false, new Card(Rank.TEN, Suit.HEART)),
+    new Slot(false, new Card(Rank.QUEEN, Suit.HEART)),
+    new Slot(false, new Card(Rank.QUEEN, Suit.DIAMOND)),
+    new Slot(false, new Card(Rank.FIVE, Suit.HEART)),
+    new Slot(false, new Card(Rank.THREE, Suit.DIAMOND))
   ],
   [
-    new Card(Rank.KING, Suit.CLUB),
-    new Card(Rank.EIGHT, Suit.SPADE),
-    new Card(Rank.TEN, Suit.CLUB),
-    new Card(Rank.QUEEN, Suit.CLUB),
-    new Card(Rank.KING, Suit.CLUB),
-    new Card(Rank.ACE, Suit.CLUB),
-    new Card(Rank.ACE, Suit.DIAMOND),
-    new Card(Rank.KING, Suit.DIAMOND),
-    new Card(Rank.FOUR, Suit.HEART),
-    new Card(Rank.FOUR, Suit.DIAMOND)
+    new Slot(false, new Card(Rank.KING, Suit.CLUB)),
+    new Slot(false, new Card(Rank.EIGHT, Suit.SPADE)),
+    new Slot(false, new Card(Rank.TEN, Suit.CLUB)),
+    new Slot(false, new Card(Rank.QUEEN, Suit.CLUB)),
+    new Slot(false, new Card(Rank.KING, Suit.CLUB)),
+    new Slot(false, new Card(Rank.ACE, Suit.CLUB)),
+    new Slot(false, new Card(Rank.ACE, Suit.DIAMOND)),
+    new Slot(false, new Card(Rank.KING, Suit.DIAMOND)),
+    new Slot(false, new Card(Rank.FOUR, Suit.HEART)),
+    new Slot(false, new Card(Rank.FOUR, Suit.DIAMOND))
   ],
   [
-    new Card(Rank.ACE, Suit.CLUB),
-    new Card(Rank.SEVEN, Suit.SPADE),
-    new Card(Rank.SIX, Suit.SPADE),
-    new Card(Rank.FIVE, Suit.SPADE),
-    new Card(Rank.FOUR, Suit.SPADE),
-    new Card(Rank.THREE, Suit.SPADE),
-    new Card(Rank.TWO, Suit.SPADE),
-    new Card(Rank.TWO, Suit.HEART),
-    new Card(Rank.THREE, Suit.HEART),
-    new Card(Rank.FIVE, Suit.DIAMOND)
+    new Slot(false, new Card(Rank.ACE, Suit.CLUB)),
+    new Slot(false, new Card(Rank.SEVEN, Suit.SPADE)),
+    new Slot(false, new Card(Rank.SIX, Suit.SPADE)),
+    new Slot(false, new Card(Rank.FIVE, Suit.SPADE)),
+    new Slot(false, new Card(Rank.FOUR, Suit.SPADE)),
+    new Slot(false, new Card(Rank.THREE, Suit.SPADE)),
+    new Slot(false, new Card(Rank.TWO, Suit.SPADE)),
+    new Slot(false, new Card(Rank.TWO, Suit.HEART)),
+    new Slot(false, new Card(Rank.THREE, Suit.HEART)),
+    new Slot(false, new Card(Rank.FIVE, Suit.DIAMOND))
   ],
   [
-    null,
-    new Card(Rank.ACE, Suit.DIAMOND),
-    new Card(Rank.KING, Suit.DIAMOND),
-    new Card(Rank.QUEEN, Suit.DIAMOND),
-    new Card(Rank.TEN, Suit.DIAMOND),
-    new Card(Rank.NINE, Suit.DIAMOND),
-    new Card(Rank.EIGHT, Suit.DIAMOND),
-    new Card(Rank.SEVEN, Suit.DIAMOND),
-    new Card(Rank.SIX, Suit.DIAMOND),
-    null
+    new Slot(true),
+    new Slot(false, new Card(Rank.ACE, Suit.DIAMOND)),
+    new Slot(false, new Card(Rank.KING, Suit.DIAMOND)),
+    new Slot(false, new Card(Rank.QUEEN, Suit.DIAMOND)),
+    new Slot(false, new Card(Rank.TEN, Suit.DIAMOND)),
+    new Slot(false, new Card(Rank.NINE, Suit.DIAMOND)),
+    new Slot(false, new Card(Rank.EIGHT, Suit.DIAMOND)),
+    new Slot(false, new Card(Rank.SEVEN, Suit.DIAMOND)),
+    new Slot(false, new Card(Rank.SIX, Suit.DIAMOND)),
+    new Slot(true)
   ]
 ];

@@ -4,9 +4,10 @@ import MoveType from "./MoveType";
 import Position from "./Position";
 import Chip from "./Chip";
 import ChipColor from "./ChipColor";
+import Slot from "./Slot";
 
 export default function nextMove(
-  boardCards: (Card | null | Chip)[][],
+  boardCards: Slot[][],
   playerCards: Card[],
   yourChipColor: ChipColor
 ): Move {
@@ -20,15 +21,12 @@ export default function nextMove(
   throw new Error("All player cards are dead cards");
 }
 
-function findCardPosition(
-  boardCards: (Card | null | Chip)[][],
-  playerCard: Card
-): Position | null {
-  for (let row = 0; row < boardCards.length; row++) {
-    const rowCards = boardCards[row];
+function findCardPosition(slots: Slot[][], playerCard: Card): Position | null {
+  for (let row = 0; row < slots.length; row++) {
+    const rowCards = slots[row];
     for (let col = 0; col < rowCards.length; col++) {
-      const card = rowCards[col];
-      if (card instanceof Card && playerCard.matches(card)) {
+      const slot = rowCards[col];
+      if (slot.isEmptySlot() && slot.hasMatchingCard(playerCard)) {
         return new Position(row, col);
       }
     }

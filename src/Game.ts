@@ -13,9 +13,10 @@ import Computer2 from "./Computer2";
 import Suit from "./Suit";
 import Rank from "./Rank";
 import Position from "./Position";
+import Slot from "./Slot";
 
 type AlgorithmMethodSignature = (
-  boardCards: (Card | null | Chip)[][],
+  boardCards: Slot[][],
   playerCards: Card[],
   chipColor: ChipColor
 ) => Move;
@@ -254,18 +255,18 @@ export default class Game {
       throw Error(`Invalid position [${move.position}]`);
     }
 
-    const space = this.board.slots[move.position.row][move.position.col];
-    if (!(space instanceof Chip)) {
+    const slot = this.board.slots[move.position.row][move.position.col];
+    if (slot.chip == null) {
       throw Error(
-        `There is no chip at position: ${move.position.toString()} ${space}`
+        `There is no chip at position: ${move.position.toString()} ${slot}`
       );
     }
 
-    if (space.color === player.chipColor) {
+    if (slot.chip.color === player.chipColor) {
       throw Error("Select chip of opponent player.");
     }
 
-    if (space instanceof Chip && space.isInSequence()) {
+    if (slot.chip != null && slot.chip.isInSequence()) {
       throw Error("Chip is already part of a sequence");
     }
   }
@@ -274,8 +275,8 @@ export default class Game {
     for (let row = 0; row < this.board.slots.length; row = row + 1) {
       const slotsRow = this.board.slots[row];
       for (let col = 0; col < slotsRow.length; col = col + 1) {
-        const space = slotsRow[col];
-        if (space instanceof Card && move.card.matches(space)) {
+        const slot = slotsRow[col];
+        if (slot.isEmptySlot() && slot.hasMatchingCard(move.card)) {
           throw Error(`Card is not dead: ${move.card.toString()}`);
         }
       }

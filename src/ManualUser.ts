@@ -4,9 +4,10 @@ import MoveType from "./MoveType";
 import Position from "./Position";
 import Chip from "./Chip";
 import ChipColor from "./ChipColor";
+import Slot from "./Slot";
 
 export default function nextMove(
-  boardCards: (Card | null | Chip)[][],
+  slots: Slot[][],
   playerCards: Card[],
   yourChipColor: ChipColor
 ): Move {
@@ -15,7 +16,7 @@ export default function nextMove(
     p = place chip, r = remove chip, d = dead card \r\n${cardsText}`;
   const val = prompt(instructions);
   if (!val) {
-    return auto(boardCards, playerCards);
+    return auto(slots, playerCards);
   }
   const type = val.substr(0, 1);
   const index = Number(val.substr(1, 1));
@@ -38,10 +39,10 @@ export default function nextMove(
   }
 }
 
-function auto(boardCards: (Card | null | Chip)[][], playerCards: Card[]) {
+function auto(slots: Slot[][], playerCards: Card[]) {
   for (let i = 0; i < playerCards.length; i++) {
     const card = playerCards[i];
-    const position = findCardPosition(boardCards, card);
+    const position = findCardPosition(slots, card);
     if (position != null) {
       return new Move(MoveType.PLACE_CHIP, card, position);
     }
@@ -49,15 +50,12 @@ function auto(boardCards: (Card | null | Chip)[][], playerCards: Card[]) {
   throw new Error("All player cards are dead cards");
 }
 
-function findCardPosition(
-  boardCards: (Card | null | Chip)[][],
-  playerCard: Card
-): Position | null {
-  for (let row = 0; row < boardCards.length; row++) {
-    const rowCards = boardCards[row];
-    for (let col = 0; col < rowCards.length; col++) {
-      const card = rowCards[col];
-      if (card instanceof Card && playerCard.matches(card)) {
+function findCardPosition(slots: Slot[][], playerCard: Card): Position | null {
+  for (let row = 0; row < slots.length; row++) {
+    const slotsRow = slots[row];
+    for (let col = 0; col < slotsRow.length; col++) {
+      const slot = slotsRow[col];
+      if (slot.isEmptySlot() && slot.hasMatchingCard(playerCard)) {
         return new Position(row, col);
       }
     }

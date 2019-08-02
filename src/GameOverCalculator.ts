@@ -2,17 +2,25 @@ import Board from "./Board";
 import ChipColor from "./ChipColor";
 import Card from "./Card";
 import Chip from "./Chip";
+import Slot from "./Slot";
 
 export default class GameOverCalculator {
   public static calculate(board: Board, chipColor: ChipColor): boolean {
     let sequenceCount: number = 0;
     for (let index = 0; index < 10; index++) {
       const rowSlots = board.slots[index];
-      sequenceCount = this.calculateSequenceCount(rowSlots, chipColor, sequenceCount);
+      sequenceCount = this.calculateSequenceCount(
+        rowSlots,
+        chipColor,
+        sequenceCount
+      );
 
       const colSlots = board.slots.map(s => s[index]);
-      sequenceCount = this.calculateSequenceCount(colSlots, chipColor, sequenceCount);
-
+      sequenceCount = this.calculateSequenceCount(
+        colSlots,
+        chipColor,
+        sequenceCount
+      );
     }
 
     let row = 0;
@@ -29,7 +37,11 @@ export default class GameOverCalculator {
           column++;
         }
       }
-      sequenceCount = this.calculateSequenceCount(diagMatrix, chipColor, sequenceCount);
+      sequenceCount = this.calculateSequenceCount(
+        diagMatrix,
+        chipColor,
+        sequenceCount
+      );
     }
 
     for (let i = 1; i < 10; i++) {
@@ -44,8 +56,11 @@ export default class GameOverCalculator {
         }
       }
 
-      sequenceCount = this.calculateSequenceCount(diagMatrix, chipColor, sequenceCount);
-
+      sequenceCount = this.calculateSequenceCount(
+        diagMatrix,
+        chipColor,
+        sequenceCount
+      );
     }
 
     for (let i = 9; i > 0; i--) {
@@ -60,7 +75,11 @@ export default class GameOverCalculator {
         }
       }
 
-      sequenceCount = this.calculateSequenceCount(diagMatrix, chipColor, sequenceCount);
+      sequenceCount = this.calculateSequenceCount(
+        diagMatrix,
+        chipColor,
+        sequenceCount
+      );
     }
 
     for (let i = 1; i < 10; i++) {
@@ -75,7 +94,11 @@ export default class GameOverCalculator {
           column--;
         }
       }
-      sequenceCount = this.calculateSequenceCount(diagMatrix, chipColor, sequenceCount);
+      sequenceCount = this.calculateSequenceCount(
+        diagMatrix,
+        chipColor,
+        sequenceCount
+      );
     }
 
     return sequenceCount > 1;
@@ -83,11 +106,12 @@ export default class GameOverCalculator {
     // Calculate diagonally
   }
 
-  private static calculateSequenceCount(rowSlots: any, chipColor: ChipColor, sequenceCount: number) {
-    const rowResult: Result = GameOverCalculator.hasSequence(
-        rowSlots,
-        chipColor
-    );
+  private static calculateSequenceCount(
+    slots: Slot[],
+    chipColor: ChipColor,
+    sequenceCount: number
+  ) {
+    const rowResult: Result = GameOverCalculator.hasSequence(slots, chipColor);
     if (rowResult.hasSequence()) {
       rowResult.markChipsInSequence();
       // Complete row is part of two sequence
@@ -100,25 +124,25 @@ export default class GameOverCalculator {
     return sequenceCount;
   }
 
-  private static hasSequence(
-    row: (null | Chip | Card)[],
-    chipColor: ChipColor
-  ): Result {
+  private static hasSequence(row: Slot[], chipColor: ChipColor): Result {
     const result = new Result();
     for (let i = 0; i < row.length; i++) {
-      const element = row[i];
+      const slot = row[i];
 
       // either same color chip or corner
       if (
-        element === null ||
-        (element instanceof Chip && element.color === chipColor)
+        slot.isCorner ||
+        (slot.chip != null && slot.chip.color === chipColor)
       ) {
-        if (element != null) {
-          result.addChip(element);
+        if (slot.chip != null) {
+          result.addChip(slot.chip);
         } else {
           result.addCorner();
         }
       } else {
+        if (result.hasSequence()) {
+          return result;
+        }
         result.resetSequence();
       }
     }

@@ -4,16 +4,17 @@ import MoveType from "./MoveType";
 import Position from "./Position";
 import Chip from "./Chip";
 import ChipColor from "./ChipColor";
+import Slot from "./Slot";
 
 export default function nextMove(
-  boardCards: (Card | null | Chip)[][],
+  slots: Slot[][],
   playerCards: Card[],
   yourChipColor: ChipColor
 ): Move {
   const positions: Position[] = [];
   for (let i = 0; i < playerCards.length; i++) {
     const card = playerCards[i];
-    const position = findCardPosition(boardCards, card);
+    const position = findCardPosition(slots, card);
 
     // We have dead card need to replace it
     if (position == null) {
@@ -25,11 +26,11 @@ export default function nextMove(
 
   const nearestPosition = findNearestPositionTo(new Position(5, 5), positions);
 
-  const card = boardCards[nearestPosition.row][nearestPosition.col];
-  if (!(card instanceof Card)) {
-    throw Error(`no card at position: ${nearestPosition.toString()}`);
+  const slot = slots[nearestPosition.row][nearestPosition.col];
+  if (!slot.isEmptySlot() || slot.card == null) {
+    throw Error(`Slot is not empty at position: ${nearestPosition.toString()}`);
   }
-  return new Move(MoveType.PLACE_CHIP, card, nearestPosition);
+  return new Move(MoveType.PLACE_CHIP, slot.card, nearestPosition);
 }
 
 function findNearestPositionTo(
@@ -56,15 +57,12 @@ function distance(point1: Position, point2: Position): number {
   return Math.sqrt(a * a + b * b);
 }
 
-function findCardPosition(
-  boardCards: (Card | null | Chip)[][],
-  playerCard: Card
-): Position | null {
-  for (let row = 0; row < boardCards.length; row++) {
-    const rowCards = boardCards[row];
-    for (let col = 0; col < rowCards.length; col++) {
-      const card = rowCards[col];
-      if (card instanceof Card && playerCard.matches(card)) {
+function findCardPosition(slots: Slot[][], playerCard: Card): Position | null {
+  for (let row = 0; row < slots.length; row++) {
+    const slotsRow = slots[row];
+    for (let col = 0; col < slotsRow.length; col++) {
+      const slot = slotsRow[col];
+      if (slot.isEmptySlot() && slot.hasMatchingCard(playerCard)) {
         return new Position(row, col);
       }
     }
