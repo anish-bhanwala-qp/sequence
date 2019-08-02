@@ -6,6 +6,7 @@ import Chip from "./Chip";
 import Position from "./Position";
 import GAME_CONFIG from "./GAME_CONFIG";
 import Slot from "./Slot";
+import DrawSuit from "./DrawSuit";
 
 export default class Board {
   readonly slots: Slot[][];
@@ -225,6 +226,16 @@ export default class Board {
 
   private drawCorner(ctx: CanvasRenderingContext2D, position: Position) {
     this.drawBorderedRect(ctx, position, "#eee");
+
+    const radius = GAME_CONFIG.CHIP_RADIUS;
+    const halfWidth = GAME_CONFIG.CARD_SIZE / 2;
+    const y = position.row * GAME_CONFIG.CARD_SIZE + halfWidth;
+    const x = position.col * GAME_CONFIG.CARD_SIZE + halfWidth;
+
+    ctx.fillStyle = "#000";
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+    ctx.fill();
   }
 
   private drawChip(
@@ -285,12 +296,12 @@ export default class Board {
     const indexY = y + GAME_CONFIG.INDEX_Y_OFFSET;
     ctx.fillText(`(${position.row}, ${position.col})`, indexX, indexY);
 
-    ctx.fillStyle = card.suitColor();
-    ctx.font = GAME_CONFIG.SUIT_FONT_FAMILY;
-    ctx.fillText(
-      `${card.suitDisplay()}`,
+    Suit.getDrawFunction(card.suit)(
+      ctx,
       x + GAME_CONFIG.SUIT_X_OFFSET,
-      y + GAME_CONFIG.SUIT_Y_OFFSET
+      y + GAME_CONFIG.SUIT_Y_OFFSET,
+      GAME_CONFIG.SUIT_WIDTH,
+      GAME_CONFIG.SUIT_HEIGHT
     );
     //console.log(`card: ${card.toString()} position x: ${x}, y: ${y}`);
   }

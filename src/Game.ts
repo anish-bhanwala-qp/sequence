@@ -294,7 +294,9 @@ export default class Game {
   }
 
   private display() {
-    this.board.displayBoard(this.ctx);
+    requestAnimationFrame(() => {
+      this.board.displayBoard(this.ctx);
+    });
     this.player1.display(this.player1DisplayDiv);
     this.player2.display(this.player2DisplayDiv);
   }
