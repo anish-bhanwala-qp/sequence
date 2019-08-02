@@ -34,6 +34,8 @@ export default class Game {
   private readonly computer1: AlgorithmMethodSignature;
   private readonly computer2: AlgorithmMethodSignature;
   private turnTimeout?: NodeJS.Timeout;
+  private readonly promise: Promise<string>;
+  private resolvePromise?: (playerName: string) => void;
 
   constructor(
     player1Name: string,
@@ -47,6 +49,9 @@ export default class Game {
     }
     setupGameConfig(displaySmall);
 
+    this.promise = new Promise(resolve => {
+      this.resolvePromise = resolve;
+    });
     this.canvas = this.createCanvas();
     this.ctx = this.setupCanvas();
     this.resultHeader = this.createResultHeading();
@@ -71,8 +76,6 @@ export default class Game {
 
     this.board = new Board();
     this.deck = new Deck();
-
-    this.start();
   }
 
   public start() {
@@ -82,6 +85,8 @@ export default class Game {
 
     this.display();
     this.playOneRound();
+
+    return this.promise;
   }
 
   private playOneRound() {
@@ -93,14 +98,15 @@ export default class Game {
         console.error(e);
         this.markGameOver(
           `${this.player2.name} won because of other player's 
-          error: <small style="color: #848484">${e.message}</small>`
+          error: <small style="color: #848484">${e.message}</small>`,
+          this.player2
         );
         return;
       }
 
       // check if game is over and player won the game
       if (this.isGameOver(this.player1)) {
-        this.markGameOver(`${this.player1.name} wins!`);
+        this.markGameOver(`${this.player1.name} wins!`, this.player1);
         return;
       }
 
@@ -111,13 +117,14 @@ export default class Game {
         console.error(e);
         this.markGameOver(
           `${this.player1.name} won because of other player's 
-          error: <small style="color: #848484">${e.message}</small>`
+          error: <small style="color: #848484">${e.message}</small>`,
+          this.player1
         );
         return;
       }
       // check if game is over and player won the game
       if (this.isGameOver(this.player2)) {
-        this.markGameOver(`${this.player2.name} wins!`);
+        this.markGameOver(`${this.player2.name} wins!`, this.player2);
         return;
       }
 
@@ -127,7 +134,7 @@ export default class Game {
       );
     } catch (e) {
       console.error(e, this);
-      this.markGameOver(`Game error: ${e.message}`);
+      this.markGameOver(`Game error: ${e.message}`, null);
     }
   }
 
@@ -305,7 +312,7 @@ export default class Game {
     return GameOverCalculator.calculate(this.board, player.chipColor);
   }
 
-  private markGameOver(message: string) {
+  private markGameOver(message: string, player: Player | null) {
     this.resultHeader.innerHTML = message;
     this.resultHeader.style.display = "block";
     // console.log(this);
@@ -313,6 +320,11 @@ export default class Game {
       clearTimeout(this.turnTimeout);
     }
     this.display();
+
+    if (this.resolvePromise == null) {
+      throw Error("resolvePromise is undefined");
+    }
+    this.resolvePromise(player == null ? "Game Draw" : player.name);
   }
 
   private dealCards(player: Player) {
