@@ -78,7 +78,7 @@ let GAME_CONFIG = Object.freeze({
     return CURRENT_CONFIG["INDEX_X_OFFSET"];
   },
   get INDEX_Y_OFFSET(): number {
-    return CURRENT_CONFIG["CANVAS_HEIGHT"];
+    return CURRENT_CONFIG["INDEX_Y_OFFSET"];
   },
   get TURN_INTERVAL(): number {
     return CURRENT_CONFIG["INDEX_Y_OFFSET"];
