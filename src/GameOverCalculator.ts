@@ -8,34 +8,11 @@ export default class GameOverCalculator {
     let sequenceCount: number = 0;
     for (let index = 0; index < 10; index++) {
       const rowSlots = board.slots[index];
-      const rowResult: Result = GameOverCalculator.hasSequence(
-        rowSlots,
-        chipColor
-      );
-      if (rowResult.hasSequence()) {
-        rowResult.markChipsInSequence();
-        // Complete row is part of two sequence
-        if (rowResult.sequenceCount === 10) {
-          sequenceCount += 2;
-        } else {
-          sequenceCount++;
-        }
-      }
+      sequenceCount = this.calculateSequenceCount(rowSlots, chipColor, sequenceCount);
 
       const colSlots = board.slots.map(s => s[index]);
-      const colResult: Result = GameOverCalculator.hasSequence(
-        colSlots,
-        chipColor
-      );
-      if (colResult.hasSequence()) {
-        colResult.markChipsInSequence();
-        // Complete row is part of two sequence
-        if (colResult.sequenceCount === 10) {
-          sequenceCount += 2;
-        } else {
-          sequenceCount++;
-        }
-      }
+      sequenceCount = this.calculateSequenceCount(colSlots, chipColor, sequenceCount);
+
     }
 
     let row = 0;
@@ -52,15 +29,7 @@ export default class GameOverCalculator {
           column++;
         }
       }
-      const diagRes: Result = GameOverCalculator.hasSequence(
-        diagMatrix,
-        chipColor
-      );
-
-      if (diagRes.hasSequence()) {
-        diagRes.markChipsInSequence();
-        sequenceCount++;
-      }
+      sequenceCount = this.calculateSequenceCount(diagMatrix, chipColor, sequenceCount);
     }
 
     for (let i = 1; i < 10; i++) {
@@ -75,15 +44,8 @@ export default class GameOverCalculator {
         }
       }
 
-      const diagRes: Result = GameOverCalculator.hasSequence(
-        diagMatrix,
-        chipColor
-      );
+      sequenceCount = this.calculateSequenceCount(diagMatrix, chipColor, sequenceCount);
 
-      if (diagRes.hasSequence()) {
-        diagRes.markChipsInSequence();
-        sequenceCount++;
-      }
     }
 
     for (let i = 9; i > 0; i--) {
@@ -98,15 +60,7 @@ export default class GameOverCalculator {
         }
       }
 
-      const diagRes: Result = GameOverCalculator.hasSequence(
-        diagMatrix,
-        chipColor
-      );
-
-      if (diagRes.hasSequence()) {
-        diagRes.markChipsInSequence();
-        sequenceCount++;
-      }
+      sequenceCount = this.calculateSequenceCount(diagMatrix, chipColor, sequenceCount);
     }
 
     for (let i = 1; i < 10; i++) {
@@ -121,21 +75,29 @@ export default class GameOverCalculator {
           column--;
         }
       }
-
-      const diagRes: Result = GameOverCalculator.hasSequence(
-        diagMatrix,
-        chipColor
-      );
-
-      if (diagRes.hasSequence()) {
-        diagRes.markChipsInSequence();
-        sequenceCount++;
-      }
+      sequenceCount = this.calculateSequenceCount(diagMatrix, chipColor, sequenceCount);
     }
 
     return sequenceCount > 1;
 
     // Calculate diagonally
+  }
+
+  private static calculateSequenceCount(rowSlots: any, chipColor: ChipColor, sequenceCount: number) {
+    const rowResult: Result = GameOverCalculator.hasSequence(
+        rowSlots,
+        chipColor
+    );
+    if (rowResult.hasSequence()) {
+      rowResult.markChipsInSequence();
+      // Complete row is part of two sequence
+      if (rowResult.sequenceCount === 10) {
+        sequenceCount += 2;
+      } else {
+        sequenceCount++;
+      }
+    }
+    return sequenceCount;
   }
 
   private static hasSequence(
