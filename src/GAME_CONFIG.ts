@@ -40,6 +40,67 @@ const LARGE = Object.freeze({
   RESULT_DIV_FONT_SIZE: "50px"
 });
 
-const GAME_CONFIG = LARGE;
+let GAME_CONFIG = Object.freeze({
+  get NUMBER_OF_CARDS_TWO_PLAYER(): number {
+    return CURRENT_CONFIG["NUMBER_OF_CARDS_TWO_PLAYER"];
+  },
+  get CANVAS_WIDTH(): number {
+    return CURRENT_CONFIG["CANVAS_WIDTH"];
+  },
+  get CANVAS_HEIGHT(): number {
+    return CURRENT_CONFIG["CANVAS_HEIGHT"];
+  },
+  get CARD_SIZE(): number {
+    return CURRENT_CONFIG["CARD_SIZE"];
+  },
+  get RANK_FONT_FAMILY(): string {
+    return CURRENT_CONFIG["RANK_FONT_FAMILY"];
+  },
+  get RANK_X_OFFSET(): number {
+    return CURRENT_CONFIG["RANK_X_OFFSET"];
+  },
+  get RANK_Y_OFFSET(): number {
+    return CURRENT_CONFIG["RANK_Y_OFFSET"];
+  },
+  get SUIT_FONT_FAMILY(): string {
+    return CURRENT_CONFIG["SUIT_FONT_FAMILY"];
+  },
+  get SUIT_X_OFFSET(): number {
+    return CURRENT_CONFIG["SUIT_X_OFFSET"];
+  },
+  get SUIT_Y_OFFSET(): number {
+    return CURRENT_CONFIG["SUIT_Y_OFFSET"];
+  },
+  get INDEX_FONT_FAMILY(): string {
+    return CURRENT_CONFIG["INDEX_FONT_FAMILY"];
+  },
+  get INDEX_X_OFFSET(): number {
+    return CURRENT_CONFIG["INDEX_X_OFFSET"];
+  },
+  get INDEX_Y_OFFSET(): number {
+    return CURRENT_CONFIG["CANVAS_HEIGHT"];
+  },
+  get TURN_INTERVAL(): number {
+    return CURRENT_CONFIG["INDEX_Y_OFFSET"];
+  },
+  get CHIP_RADIUS(): number {
+    return CURRENT_CONFIG["CHIP_RADIUS"];
+  },
+  get PLAYER_CARDS_DIV_FONT_SIZE(): string {
+    return CURRENT_CONFIG["PLAYER_CARDS_DIV_FONT_SIZE"];
+  },
+  get PLAYER_CARDS_INDEX_FONT_SIZE(): string {
+    return CURRENT_CONFIG["PLAYER_CARDS_INDEX_FONT_SIZE"];
+  },
+  get RESULT_DIV_FONT_SIZE(): string {
+    return CURRENT_CONFIG["RESULT_DIV_FONT_SIZE"];
+  }
+});
+
+let CURRENT_CONFIG = LARGE;
+
+export function setupGameConfig(useSmall = false) {
+  CURRENT_CONFIG = useSmall ? SMALL : LARGE;
+}
 
 export default GAME_CONFIG;

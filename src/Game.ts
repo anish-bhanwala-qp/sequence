@@ -1,7 +1,7 @@
 import Player from "./Player";
 import Board from "./Board";
 import Deck from "./Deck";
-import GAME_CONFIG from "./GAME_CONFIG";
+import GAME_CONFIG, { setupGameConfig } from "./GAME_CONFIG";
 import Move from "./Move";
 import Card from "./Card";
 import Computer from "./Computer";
@@ -38,11 +38,14 @@ export default class Game {
     player1Name: string,
     player1Algorithm: AlgorithmMethodSignature,
     player2Name: string = "Computer",
-    player2Algorithm: AlgorithmMethodSignature = Computer
+    player2Algorithm: AlgorithmMethodSignature = Computer,
+    displaySmall = false
   ) {
     if (player1Algorithm == null || typeof player1Algorithm !== "function") {
       throw Error("Must provide game algorithm function to play");
     }
+    setupGameConfig(displaySmall);
+
     this.canvas = this.createCanvas();
     this.ctx = this.setupCanvas();
     this.resultHeader = this.createResultHeading();
