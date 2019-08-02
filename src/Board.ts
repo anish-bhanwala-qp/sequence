@@ -207,13 +207,8 @@ export default class Board {
     console.log(deck);
   }
 
-  public displayBoard(canvas: HTMLCanvasElement) {
-    const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
-    if (ctx === null) {
-      throw Error("Unable to get CanvasRenderingContext2D");
-    }
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  public displayBoard(ctx: CanvasRenderingContext2D) {
+    ctx.clearRect(0, 0, GAME_CONFIG.CANVAS_WIDTH, GAME_CONFIG.CANVAS_HEIGHT);
     for (let row = 0; row < this.slots.length; row = row + 1) {
       const rowCards = this.slots[row];
       for (let col = 0; col < rowCards.length; col = col + 1) {

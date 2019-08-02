@@ -26,12 +26,13 @@ export default class Game {
   private readonly board: Board;
   private readonly deck: Deck;
   private readonly canvas: HTMLCanvasElement;
+  private readonly ctx: CanvasRenderingContext2D;
   private readonly resultHeader: HTMLHeadElement;
   private readonly player1DisplayDiv: HTMLDivElement;
   private readonly player2DisplayDiv: HTMLDivElement;
   private readonly computer1: AlgorithmMethodSignature;
   private readonly computer2: AlgorithmMethodSignature;
-  private gameInterval?: NodeJS.Timeout;
+  private turnTimeout?: NodeJS.Timeout;
 
   constructor(
     player1Name: string,
@@ -43,6 +44,7 @@ export default class Game {
       throw Error("Must provide game algorithm function to play");
     }
     this.canvas = this.createCanvas();
+    this.ctx = this.setupCanvas();
     this.resultHeader = this.createResultHeading();
     this.player1DisplayDiv = this.createPlayerCardsHolder("player1DisplayDiv");
     this.player2DisplayDiv = this.createPlayerCardsHolder("player2DisplayDiv");
@@ -75,9 +77,7 @@ export default class Game {
     this.dealCards(this.player2);
 
     this.display();
-    this.gameInterval = setInterval(() => {
-      this.playOneRound();
-    }, GAME_CONFIG.TURN_INTERVAL);
+    this.playOneRound();
   }
 
   private playOneRound() {
@@ -116,6 +116,11 @@ export default class Game {
         this.markGameOver(`${this.player2.name} wins!`);
         return;
       }
+
+      this.turnTimeout = setTimeout(
+        () => this.playOneRound(),
+        GAME_CONFIG.TURN_INTERVAL
+      );
     } catch (e) {
       console.error(e, this);
       this.markGameOver(`Game error: ${e.message}`);
@@ -285,7 +290,7 @@ export default class Game {
   }
 
   private display() {
-    this.board.displayBoard(this.canvas);
+    this.board.displayBoard(this.ctx);
     this.player1.display(this.player1DisplayDiv);
     this.player2.display(this.player2DisplayDiv);
   }
@@ -298,8 +303,8 @@ export default class Game {
     this.resultHeader.innerHTML = message;
     this.resultHeader.style.display = "block";
     console.log(this);
-    if (this.gameInterval != null) {
-      clearInterval(this.gameInterval);
+    if (this.turnTimeout != null) {
+      clearTimeout(this.turnTimeout);
     }
     this.display();
   }
@@ -353,5 +358,25 @@ export default class Game {
   appendElementToBody(element: any) {
     const body = document.getElementsByTagName("body")[0];
     body.appendChild(element);
+  }
+
+  // https://www.html5rocks.com/en/tutorials/canvas/hidpi/
+  setupCanvas() {
+    // Get the device pixel ratio, falling back to 1.
+    var dpr = window.devicePixelRatio || 1;
+    // Get the size of the this.canvas in CSS pixels.
+    var rect = this.canvas.getBoundingClientRect();
+    // Give the this.canvas pixel dimensions of their CSS
+    // size * the device pixel ratio.
+    this.canvas.width = rect.width * dpr;
+    this.canvas.height = rect.height * dpr;
+    const ctx = this.canvas.getContext("2d");
+    if (ctx === null) {
+      throw Error("Unable to get CanvasRenderingContext2D");
+    }
+    // Scale all drawing operations by the dpr, so you
+    // don't have to worry about the difference.
+    ctx.scale(dpr, dpr);
+    return ctx;
   }
 }
