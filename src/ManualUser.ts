@@ -12,8 +12,9 @@ export default function nextMove(
   yourChipColor: ChipColor
 ): Move {
   const cardsText = playerCards.map(c => c.toString()).join(",");
-  const instructions = `computer2: 
-    p = place chip, r = remove chip, d = dead card \r\n${cardsText}`;
+  const instructions = `***p = place chip, r = remove chip, d = dead card*** 
+  ***[p|r|d][card index][card position]*** 
+  ***Example place first card at position 1:1-> p011***`;
   const val = prompt(instructions);
   if (!val) {
     return auto(slots, playerCards);
