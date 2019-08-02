@@ -38,18 +38,18 @@ export default class GameOverCalculator {
       }
     }
 
-    let r = 0;
-    let c = 0;
+    let row = 0;
+    let column = 0;
 
     for (let i = 0; i < 10; i++) {
       let diagMatrix = [];
-      r = 0;
-      c = i;
+      row = 0;
+      column = i;
       for (let j = 0; j < 10; j++) {
-        if (r <= 9 && c <= 9) {
-          diagMatrix.push(board.slots[r][c]);
-          r++;
-          c++;
+        if (row <= 9 && column <= 9) {
+          diagMatrix.push(board.slots[row][column]);
+          row++;
+          column++;
         }
       }
       const diagRes: Result = GameOverCalculator.hasSequence(
@@ -65,13 +65,13 @@ export default class GameOverCalculator {
 
     for (let i = 1; i < 10; i++) {
       let diagMatrix = [];
-      r = i;
-      c = 0;
+      row = i;
+      column = 0;
       for (let j = 0; j < 10; j++) {
-        if (r <= 9 && c <= 9) {
-          diagMatrix.push(board.slots[r][c]);
-          r++;
-          c++;
+        if (row <= 9 && column <= 9) {
+          diagMatrix.push(board.slots[row][column]);
+          row++;
+          column++;
         }
       }
 
@@ -88,13 +88,13 @@ export default class GameOverCalculator {
 
     for (let i = 9; i > 0; i--) {
       let diagMatrix = [];
-      c = i;
-      r = 0;
+      column = i;
+      row = 0;
       for (let j = 9; j > 0; j--) {
-        if (r <= 9 && c >= 0) {
-          diagMatrix.push(board.slots[r][c]);
-          r++;
-          c--;
+        if (row <= 9 && column >= 0) {
+          diagMatrix.push(board.slots[row][column]);
+          row++;
+          column--;
         }
       }
 
@@ -111,14 +111,14 @@ export default class GameOverCalculator {
 
     for (let i = 1; i < 10; i++) {
       let diagMatrix = [];
-      c = 9;
-      r = i;
+      column = 9;
+      row = i;
       for (let j = 1; j < 9; j++) {
-        if (r <= 9 && c >= 0) {
-          diagMatrix.push(board.slots[r][c]);
-          // console.log("Diagonal --> ", r,c);
-          r++;
-          c--;
+        if (row <= 9 && column >= 0) {
+          diagMatrix.push(board.slots[row][column]);
+          // console.log("Diagonal --> ", row,column);
+          row++;
+          column--;
         }
       }
 
