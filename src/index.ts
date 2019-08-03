@@ -2,7 +2,7 @@ import Game from "./Game";
 import Computer from "./Computer";
 import ManualUser from "./ManualUser";
 
-// const game = new Game("computer2", Computer, "Computer1", Computer, true).start();
+// const game = new Game("computer2", Computer, "ManualUser", ManualUser, true).start();
 // game.start();
 // console.log(game);
 

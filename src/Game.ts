@@ -84,15 +84,15 @@ export default class Game {
     this.dealCards(this.player2);
 
     this.display();
-    this.playOneRound(this.player1);
+    this.playOneRound(this.player1, this.computer1);
 
     return this.promise;
   }
 
-  private playOneRound(player: Player) {
+  private playOneRound(player: Player, algo: AlgorithmMethodSignature) {
     try {
       try {
-        this.nextPlayerMove(player, this.computer1);
+        this.nextPlayerMove(player, algo);
         this.display();
       } catch (e) {
         console.error(e);
@@ -113,7 +113,8 @@ export default class Game {
       this.turnTimeout = setTimeout(
         () =>
           this.playOneRound(
-            player === this.player1 ? this.player2 : this.player1
+            player === this.player1 ? this.player2 : this.player1,
+            player === this.player1 ? this.computer2 : this.computer1
           ),
         GAME_CONFIG.TURN_INTERVAL
       );
