@@ -84,52 +84,37 @@ export default class Game {
     this.dealCards(this.player2);
 
     this.display();
-    this.playOneRound();
+    this.playOneRound(this.player1);
 
     return this.promise;
   }
 
-  private playOneRound() {
+  private playOneRound(player: Player) {
     try {
       try {
-        this.nextPlayerMove(this.player1, this.computer1);
+        this.nextPlayerMove(player, this.computer1);
         this.display();
       } catch (e) {
         console.error(e);
         this.markGameOver(
-          `${this.player2.name} won because of other player's 
+          `${player.name} won because of other player's 
           error: <small style="color: #848484">${e.message}</small>`,
-          this.player2
+          player
         );
         return;
       }
 
       // check if game is over and player won the game
-      if (this.isGameOver(this.player1)) {
-        this.markGameOver(`${this.player1.name} wins!`, this.player1);
-        return;
-      }
-
-      try {
-        this.nextPlayerMove(this.player2, this.computer2);
-        this.display();
-      } catch (e) {
-        console.error(e);
-        this.markGameOver(
-          `${this.player1.name} won because of other player's 
-          error: <small style="color: #848484">${e.message}</small>`,
-          this.player1
-        );
-        return;
-      }
-      // check if game is over and player won the game
-      if (this.isGameOver(this.player2)) {
-        this.markGameOver(`${this.player2.name} wins!`, this.player2);
+      if (this.isGameOver(player)) {
+        this.markGameOver(`${player.name} wins!`, player);
         return;
       }
 
       this.turnTimeout = setTimeout(
-        () => this.playOneRound(),
+        () =>
+          this.playOneRound(
+            player === this.player1 ? this.player2 : this.player1
+          ),
         GAME_CONFIG.TURN_INTERVAL
       );
     } catch (e) {

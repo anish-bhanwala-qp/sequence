@@ -14,7 +14,7 @@ const SMALL = Object.freeze({
   INDEX_FONT_FAMILY: "10px Helvetica",
   INDEX_X_OFFSET: 33,
   INDEX_Y_OFFSET: 15,
-  TURN_INTERVAL: 200,
+  TURN_INTERVAL: 100,
   CHIP_RADIUS: 12,
   PLAYER_CARDS_DIV_FONT_SIZE: "18px",
   PLAYER_CARDS_INDEX_FONT_SIZE: "10px",
@@ -91,7 +91,7 @@ let GAME_CONFIG = Object.freeze({
     return CURRENT_CONFIG["INDEX_Y_OFFSET"];
   },
   get TURN_INTERVAL(): number {
-    return CURRENT_CONFIG["INDEX_Y_OFFSET"];
+    return CURRENT_CONFIG["TURN_INTERVAL"];
   },
   get CHIP_RADIUS(): number {
     return CURRENT_CONFIG["CHIP_RADIUS"];
