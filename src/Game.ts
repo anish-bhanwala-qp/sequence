@@ -95,11 +95,13 @@ export default class Game {
         this.nextPlayerMove(player, algo);
         this.display();
       } catch (e) {
+        const otherPlayer =
+          player === this.player1 ? this.player2 : this.player1;
         console.error(e);
         this.markGameOver(
-          `${player.name} won because of other player's 
+          `${otherPlayer.name} won because of other player's 
           error: <small style="color: #848484">${e.message}</small>`,
-          player
+          otherPlayer
         );
         return;
       }
